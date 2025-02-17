@@ -1,0 +1,35 @@
+### Get all requests in DB
+GET http://localhost:7000/requests
+
+
+### Get all requests from logged-in user
+GET http://localhost:7000/requests/my-requests
+
+
+### Create a request
+POST http://localhost:7000/requests
+Content-Type: application/json
+
+{
+  "description": "*******REQUEST FROM TEST USER 1*******",
+  "category": "Groceries",
+  "when": "Today"
+}
+
+
+### Get specific request by request ID => /requests/:id 
+GET http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+
+
+### Update a request by request ID => requests/:id
+PATCH http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+Content-Type: application/json
+
+{
+  "when": "Next week"
+}
+
+
+### Delete a request by request ID => requests/:id
+DELETE http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+

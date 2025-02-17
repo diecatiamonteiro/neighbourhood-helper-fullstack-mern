@@ -1,0 +1,90 @@
+const zipCodes = [
+  "04177 Lindenau, Alt-Lindenau, Neu-Lindenau",
+  "04178 Böhlitz-Ehrenberg, Rückmarsdorf, Burghausen",
+  "04179 Leutzsch",
+];
+
+const users = [
+  {
+    firstName: "John",
+    lastName: "Doe",
+    username: "johndoe",
+    email: "jd@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Jane",
+    lastName: "Smith",
+    username: "janesmith",
+    email: "js@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Michael",
+    lastName: "Johnson",
+    username: "michaelj",
+    email: "mj@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Emily",
+    lastName: "Davis",
+    username: "emilyd",
+    email: "ed@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Sarah",
+    lastName: "Brown",
+    username: "sarahb",
+    email: "sb@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "David",
+    lastName: "Wilson",
+    username: "davidw",
+    email: "dw@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Laura",
+    lastName: "Martinez",
+    username: "lauram",
+    email: "lm@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Robert",
+    lastName: "Anderson",
+    username: "roberta",
+    email: "ra@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "Olivia",
+    lastName: "Garcia",
+    username: "oliviag",
+    email: "og@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+  {
+    firstName: "James",
+    lastName: "Miller",
+    username: "jamesm",
+    email: "jm@a.com",
+    password: "123",
+    zipCode: zipCodes[Math.floor(Math.random() * zipCodes.length)],
+  },
+];
+
+export default users;
