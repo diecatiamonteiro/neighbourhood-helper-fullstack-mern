@@ -5,7 +5,7 @@ export default function LoginBtn() {
   return (
     <Link
       to={"/login"}
-      className="text-lg bg-olive text-white px-4 py-2 rounded-md hover:bg-oliveHover transition-colors duration-200"
+      className="text-base lg:text-lg bg-olive text-white px-3 py-1 md:px-4 md:py-2 rounded-md hover:bg-oliveHover transition-colors duration-200"
     >
       Login
     </Link>

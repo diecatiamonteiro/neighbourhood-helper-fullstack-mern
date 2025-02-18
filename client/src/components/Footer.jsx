@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal text-white p-2">
+    <footer className="bg-charcoal text-white text-sm md:text-base md:p-2">
       <p className="text-center">
         &copy; {new Date().getFullYear()} Alt-West Connect. All rights reserved.
       </p>
