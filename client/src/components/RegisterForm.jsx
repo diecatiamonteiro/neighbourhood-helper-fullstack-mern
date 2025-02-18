@@ -55,7 +55,7 @@ export default function RegisterForm() {
       {(success || error) && (
         <div
           className={`mb-4 p-3 rounded ${
-            success ? "bg-olive text-offwhite" : "bg-brick text-offwhite"
+            success ? "bg-olive/30 text-olive" : "bg-brick/30 text-brick"
           }`}
         >
           {success
