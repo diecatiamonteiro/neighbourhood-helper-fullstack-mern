@@ -5,27 +5,33 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: "Work Sans", serif;
+  background-color: var(--color-offwhite);
+  color: var(--color-charcoal);
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --color-brick: #b85042;
+  --color-brick-hover: #9e3f34; /* Darker brick red */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-beige: #f2e1c1;
+  --color-beige-hover: #d9c4a8; /* Darker beige */
+
+  --color-charcoal: #3e3e3e;
+  --color-charcoal-hover: #2c2c2c; /* Darker charcoal */
+
+  --color-olive: #8a8a74;
+  --color-olive-hover: #747460; /* Darker olive */
+
+  --color-offwhite: #eae7dc;
+  --color-offwhite-hover: #d2cfc2; /* Darker off-white */
 }
 
-body {
+/* body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
+  min-width: 100vw;
   min-height: 100vh;
-}
+} */
 
 .spinner {
   width: 24px;
@@ -38,6 +44,10 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
