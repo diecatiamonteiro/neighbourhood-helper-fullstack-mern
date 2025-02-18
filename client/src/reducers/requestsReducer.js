@@ -3,6 +3,7 @@ export const requestsInitialState = {
   userRequests: [], // all requests from a logged-in user (for /my-requests)
   totalRequests: 0,
   currentRequest: null, // single request view (when clicking on a request to view its details, edit it)
+  isLoading: false,
   error: null,
 };
 
@@ -57,6 +58,12 @@ export const requestsReducer = (state, action) => {
         ), // creates a new array with the filtered requests (filter()), keeping only requests where ID does NOT match the deleted ID; means that the request with the same id as the payload will be removed from the userRequests array
         totalRequests: state.totalRequests - 1,
         error: null,
+      };
+
+    case "SET_LOADING_REQUESTS":
+      return {
+        ...state,
+        isLoading: action.payload,
       };
 
     case "SET_ERROR_REQUESTS":

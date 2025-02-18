@@ -1,6 +1,7 @@
 export const usersInitialState = {
   user: null,
   isAuthenticated: false,
+  isLoading: false,
   error: null,
 };
 
@@ -30,6 +31,12 @@ export const usersReducer = (state, action) => {
         user: null,
         isAuthenticated: false,
         error: null,
+      };
+
+    case "SET_LOADING_USERS":
+      return {
+        ...state,
+        isLoading: action.payload,
       };
 
     case "SET_ERROR_USERS":

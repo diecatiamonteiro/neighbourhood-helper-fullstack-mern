@@ -15,6 +15,9 @@ export default {
           offwhite: '#eae7dc',
           offwhiteHover: '#d2cfc2',
         },
+        animation: {
+          'spin-slow': 'spin 2s linear infinite', // Custom slower spin
+        }
       },
     },
     plugins: [],

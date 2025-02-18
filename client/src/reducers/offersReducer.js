@@ -6,6 +6,7 @@ export const offersInitialState = {
   requestOwner: null,
   updatedOffer: null,
   rejectedOffer: null,
+  isLoading: false,
   error: null,
 };
 
@@ -68,6 +69,12 @@ export const offersReducer = (state, action) => {
         ), // Filters out the rejected offer from the offers array
         totalOffers: state.totalOffers - 1,
         error: null,
+      };
+
+    case "SET_LOADING_OFFERS":
+      return {
+        ...state,
+        isLoading: action.payload,
       };
 
     case "SET_ERROR_OFFERS":
