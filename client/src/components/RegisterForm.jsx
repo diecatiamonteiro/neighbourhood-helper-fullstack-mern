@@ -46,7 +46,7 @@ export default function RegisterForm() {
       className="max-w-2xl mx-auto p-8 mt-6 md:mt-14 bg-white/50 rounded-lg shadow-md"
     >
       <h2 className="text-lg md:text-2xl font-semibold mb-2">
-        Hi, Alt-West Neighbour!
+        Welcome, Alt-West Neighbour!
       </h2>
       <p className="text-sm md:text-lg leading-tight md:leading-normal font-semibold mb-6">
         Create an account to ask for help or offer your help.

@@ -12,7 +12,7 @@ export const registerUser = async (usersDispatch, registerFormData) => {
       type: "SET_ERROR_USERS",
       payload: error.response?.data?.message || "Registration failed",
     });
-    throw error;
+    throw error; // Need to throw error to stop the function and show error message on RegisterForm.jsx
   } finally {
     usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }
@@ -23,12 +23,14 @@ export const loginUser = async (usersDispatch, loginFormData) => {
     const response = await axios.post("/users/login", loginFormData);
     console.log("Login Response:", response.data);
     usersDispatch({ type: "LOGIN_USER", payload: response.data.data });
+    return response.data;
   } catch (error) {
-    console.log("Login Error:", error.response.data);
+    console.log("Login Error:", error.response?.data);
     usersDispatch({
       type: "SET_ERROR_USERS",
-      payload: error.response?.data?.message || "Login failed.",
-    });
+      payload: "Invalid email or password.",
+    }); // Provide a consistent user-friendly message regardless of the error type
+    throw error; // Need to throw error to stop the function and show error message
   } finally {
     usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }
@@ -55,10 +57,13 @@ export const getUserData = async (usersDispatch) => {
     usersDispatch({ type: "GET_USER_DATA", payload: response.data.data });
   } catch (error) {
     console.log("getUserData Error:", error.response.data);
-    usersDispatch({
-      type: "SET_ERROR_USERS",
-      payload: error.response?.data?.message || "Failed to get user data.",
-    });
+    // Don't dispatch error if it's just that no user is logged in (avoids error message on login & register forms)
+    if (error.response?.status !== 401) {
+      usersDispatch({
+        type: "SET_ERROR_USERS",
+        payload: error.response?.data?.message || "Failed to get user data.",
+      });
+    }
   }
 };
 
