@@ -101,7 +101,7 @@ export default function LoginForm() {
             }`}
           >
             {success
-              ? "Login successful! Redirecting to homepage..."
+              ? "Welcome back! Redirecting to homepage..."
               : error}
           </div>
         )}

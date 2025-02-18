@@ -219,7 +219,7 @@ export default function RegisterForm() {
             }`}
           >
             {success
-              ? "Registration successful! Redirecting to homepage..."
+              ? "Welcome to Alt-West Connect! Redirecting to homepage..."
               : error}
           </div>
         )}

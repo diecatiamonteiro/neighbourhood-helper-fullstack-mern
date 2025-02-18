@@ -47,6 +47,8 @@ export const logoutUser = async (usersDispatch) => {
       type: "SET_ERROR_USERS",
       payload: error.response?.data?.message || "Logout failed.",
     });
+  } finally {
+    usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }
 };
 
