@@ -5,12 +5,16 @@ export const registerUser = async (usersDispatch, registerFormData) => {
     const response = await axios.post("/users/register", registerFormData);
     console.log("Registration Response:", response.data);
     usersDispatch({ type: "REGISTER_USER", payload: response.data.data });
+    return response.data;
   } catch (error) {
     console.log("Registration Error:", error.response.data);
     usersDispatch({
       type: "SET_ERROR_USERS",
       payload: error.response?.data?.message || "Registration failed",
     });
+    throw error;
+  } finally {
+    usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }
 };
 
@@ -25,6 +29,8 @@ export const loginUser = async (usersDispatch, loginFormData) => {
       type: "SET_ERROR_USERS",
       payload: error.response?.data?.message || "Login failed.",
     });
+  } finally {
+    usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }
 };
 

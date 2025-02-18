@@ -14,6 +14,7 @@ export default {
           oliveHover: '#747460',
           offwhite: '#eae7dc',
           offwhiteHover: '#d2cfc2',
+          success: '#528034',
         },
         animation: {
           'spin-slow': 'spin 2s linear infinite', // Custom slower spin
