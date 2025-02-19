@@ -23,6 +23,19 @@ export default function RequestCard({ request }) {
 
   const handleSubmitOffer = (e) => {};
 
+  const formatWhen = (whenString) => {
+    // Try to parse the string as a date
+    const date = new Date(whenString);
+    
+    // Check if it's a valid date (will be true for datetime strings like "2025-02-19T02:24")
+    if (date instanceof Date && !isNaN(date)) {
+      return format(date, "MMM d, yyyy, HH:mm");
+    }
+    
+    // If it's not a valid date, return the original string (e.g., "Next week")
+    return whenString;
+  };
+
   return (
     <>
       <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
@@ -41,7 +54,7 @@ export default function RequestCard({ request }) {
           <div className="flex flex-col items-start w-full bg-brick/10 p-4 rounded-lg">
             <p className="font-medium">
               <span className="font-semibold text-oliveHover">When:</span>{" "}
-              <span>{request.when}</span>
+              <span>{formatWhen(request.when)}</span>
             </p>
             <p className="font-medium">
               <span className="font-semibold text-oliveHover">Neighbour:</span>{" "}

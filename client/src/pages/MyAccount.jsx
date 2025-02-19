@@ -4,10 +4,17 @@ import { getUserData } from "../api/usersApi";
 import { getUserRequests } from "../api/requestsApi";
 import { getUserOffers } from "../api/offersApi";
 import { format } from "date-fns";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 export default function MyAccount() {
-  const { usersState, usersDispatch } = useContext(DataContext);
-  const { requestsState, requestsDispatch } = useContext(DataContext);
-  const { offersState, offersDispatch } = useContext(DataContext);
+  const {
+    usersState,
+    usersDispatch,
+    requestsState,
+    requestsDispatch,
+    offersState,
+    offersDispatch,
+  } = useContext(DataContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,12 +25,29 @@ export default function MyAccount() {
     fetchData();
   }, []);
 
+  const formatWhen = (whenString) => {
+    // Try to parse the string as a date
+    const date = new Date(whenString);
+
+    // Check if it's a valid date (will be true for datetime strings like "2025-02-19T02:24")
+    if (date instanceof Date && !isNaN(date)) {
+      return format(date, "MMM d, yyyy, HH:mm");
+    }
+
+    // If it's not a valid date, return the original string (e.g., "Next week")
+    return whenString;
+  };
+
   if (
     usersState.isLoading ||
     requestsState.isLoading ||
     offersState.isLoading
   ) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (usersState.error || requestsState.error || offersState.error) {
@@ -101,7 +125,7 @@ export default function MyAccount() {
                     </p>
                     <p>
                       <span className="font-semibold">When:</span>{" "}
-                      {request.when}
+                      {formatWhen(request.when)}
                     </p>
                     <p>
                       <span className="font-semibold">Posted:</span>{" "}
