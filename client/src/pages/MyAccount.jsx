@@ -109,30 +109,82 @@ export default function MyAccount() {
               My Requests
             </h2>
             <div className="text-left">
-              {requestsState.userRequests &&
+              {requestsState.userRequests && requestsState.userRequests.length > 0 ? (
                 requestsState.userRequests.map((request) => (
                   <div
                     key={request._id}
-                    className="border-b border-gray-200 pb-3 last:border-0 mb-3"
+                    className="border-b border-gray-200 pb-4 last:border-0 mb-4"
                   >
-                    <p>
-                      <span className="font-semibold">Description:</span>{" "}
-                      {request.description}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Status:</span>{" "}
-                      {request.status}
-                    </p>
-                    <p>
-                      <span className="font-semibold">When:</span>{" "}
-                      {formatWhen(request.when)}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Posted:</span>{" "}
-                      {format(new Date(request.createdAt), "MMM d, yyyy")}
-                    </p>
+                    <div className="mb-3">
+                      <p className="font-semibold text-lg text-olive mb-2">
+                        {request.description}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Category:</span>{" "}
+                        {request.category}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Status:</span>{" "}
+                        <span className={`capitalize ${
+                          request.status === 'open' ? 'text-green-600' :
+                          request.status === 'in progress' ? 'text-yellow-600' :
+                          'text-red-600'
+                        }`}>
+                          {request.status}
+                        </span>
+                      </p>
+                      <p>
+                        <span className="font-semibold">When:</span>{" "}
+                        {formatWhen(request.when)}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Posted:</span>{" "}
+                        {format(new Date(request.createdAt), "MMM d, yyyy")}
+                      </p>
+                    </div>
+
+                    {/* Offers Section */}
+                    <div className="ml-4 mt-3 border-l-2 border-olive/20 pl-4">
+                      <p className="font-semibold text-charcoal mb-2">
+                        Offers of Help ({(request.receivedOffers || []).length}):
+                      </p>
+                      {request.receivedOffers && request.receivedOffers.length > 0 ? (
+                        request.receivedOffers.map((offer) => (
+                          <div key={offer._id} className="mb-3 bg-offwhite/50 p-3 rounded-lg">
+                            <p>
+                              <span className="font-semibold">From:</span>{" "}
+                              {offer.helperId?.username || "Unknown User"}
+                            </p>
+                            <p>
+                              <span className="font-semibold">Message:</span>{" "}
+                              {offer.message}
+                            </p>
+                            <p>
+                              <span className="font-semibold">Status:</span>{" "}
+                              <span className={`capitalize ${
+                                offer.status === 'pending' ? 'text-yellow-600' :
+                                offer.status === 'accepted' ? 'text-green-600' :
+                                'text-red-600'
+                              }`}>
+                                {offer.status}
+                              </span>
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Offered on: {format(new Date(offer.createdAt), "MMM d, yyyy")}
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 italic">No offers yet</p>
+                      )}
+                    </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p className="text-center text-gray-500">
+                  You haven't made any requests yet.
+                </p>
+              )}
             </div>
           </div>
 
@@ -149,15 +201,47 @@ export default function MyAccount() {
                     className="border-b border-gray-200 pb-3 last:border-0 mb-3"
                   >
                     <p>
-                      <span className="font-semibold">Message:</span>{" "}
+                      <span className="font-semibold">My Message:</span>{" "}
                       {offer.message}
                     </p>
+                    <p className="font-semibold text-lg text-olive mb-2">
+                      Request: {offer.requestId.description}
+                    </p>
+
                     <p>
-                      <span className="font-semibold">Status:</span>{" "}
-                      {offer.status}
+                      <span className="font-semibold">When:</span>{" "}
+                      {formatWhen(offer.requestId.when)}
+                    </p>
+                 
+                    <p>
+                      <span className="font-semibold">Neighbour:</span>{" "}
+                      {offer.requestId.userId.username}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Offer Status:</span>{" "}
+                      <span
+                        className={`capitalize ${
+                          offer.status === "pending"
+                            ? "text-yellow-600"
+                            : offer.status === "accepted"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {offer.status}
+                      </span>
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Offered on:{" "}
+                      {format(new Date(offer.createdAt), "MMM d, yyyy")}
                     </p>
                   </div>
                 ))}
+              {offersState.userOffers.length === 0 && (
+                <p className="text-center text-gray-500">
+                  You haven't made any offers yet.
+                </p>
+              )}
             </div>
           </div>
         </div>

@@ -51,11 +51,18 @@ export const getUserRequests = async (requestsDispatch) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get(`/requests/my-requests`);
-    console.log("getUserRequests Response:", response.data);
+    
+    // Add detailed logging
+    console.log("Full getUserRequests Response:", response.data);
+    console.log("User Requests array:", response.data.userRequests);
+    if (response.data.userRequests && response.data.userRequests.length > 0) {
+      console.log("First request offers:", response.data.userRequests[0].offers);
+    }
+    
     requestsDispatch({
       type: "GET_USER_REQUESTS",
       payload: {
-        userRequests: response.data.userRequests,
+        userRequests: response.data.userRequests || [],
         totalRequests: response.data.totalRequests,
       },
     });

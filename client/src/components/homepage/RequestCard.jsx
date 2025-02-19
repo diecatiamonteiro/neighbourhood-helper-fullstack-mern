@@ -2,11 +2,15 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { DataContext } from "../../contexts/Context";
+import { postOffer } from "../../api/offersApi";
 
 export default function RequestCard({ request }) {
   const navigate = useNavigate();
-  const { usersState } = useContext(DataContext);
+  const { usersState, offersDispatch } = useContext(DataContext);
   const { isAuthenticated, user } = usersState;
+  const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleOfferHelp = () => {
     if (!isAuthenticated || !user) {
@@ -19,26 +23,41 @@ export default function RequestCard({ request }) {
       console.log("You cannot offer help on your own request");
       return;
     }
+
+    setShowModal(true);
   };
 
-  const handleSubmitOffer = (e) => {};
+  const handleSubmitOffer = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await postOffer(request._id, message, offersDispatch);
+      setShowModal(false);
+      setMessage("");
+    } catch (error) {
+      console.error("Error submitting offer:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const formatWhen = (whenString) => {
     // Try to parse the string as a date
     const date = new Date(whenString);
-    
+
     // Check if it's a valid date (will be true for datetime strings like "2025-02-19T02:24")
     if (date instanceof Date && !isNaN(date)) {
       return format(date, "MMM d, yyyy, HH:mm");
     }
-    
+
     // If it's not a valid date, return the original string (e.g., "Next week")
     return whenString;
   };
 
   return (
     <>
-      <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+      <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow relative">
         {/* Category & Status */}
         <div className="flex items-center justify-center mb-6">
           <span className="px-4 py-2 bg-olive/10 text-olive rounded-full border border-olive text-sm font-semibold">
@@ -72,6 +91,7 @@ export default function RequestCard({ request }) {
           </div>
 
           <button
+            onClick={handleOfferHelp}
             disabled={
               request.status !== "open" || user?._id === request.userId._id
             }
@@ -87,6 +107,49 @@ export default function RequestCard({ request }) {
           </button>
         </div>
       </div>
+
+      {/* Offer Help Modal - Positioned next to specific request */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div
+            className="bg-white rounded-xl p-6 max-w-md w-full"
+            style={{
+              position: "fixed",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <h3 className="text-xl font-bold text-charcoal mb-4">Offer Help</h3>
+            <form onSubmit={handleSubmitOffer}>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write a message to your neighbor..."
+                className="w-full p-3 border border-gray-300 rounded-lg mb-4 min-h-[100px]"
+                required
+                autoFocus
+              />
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-brick hover:bg-brickHover text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Offer"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }
