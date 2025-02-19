@@ -1,5 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
+import HeroSection from "../components/homepage/HeroSection";
+import IntroSection from "../components/homepage/IntroSection";
 
 export default function Homepage() {
-  return <div> Homepage</div>;
+  return (
+    <main>
+      <HeroSection />
+      <IntroSection />
+    </main>
+  );
 }

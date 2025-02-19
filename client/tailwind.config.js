@@ -16,8 +16,15 @@ export default {
           offwhiteHover: '#d2cfc2',
           success: '#528034',
         },
+        keyframes: {
+          bounce: {
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(4px)' }
+          }
+        },
         animation: {
           'spin-slow': 'spin 2s linear infinite', // Custom slower spin
+          'bounce-slow': 'bounce 1.5s infinite' // 
         }
       },
     },

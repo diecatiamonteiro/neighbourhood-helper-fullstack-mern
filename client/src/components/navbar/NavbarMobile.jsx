@@ -12,7 +12,7 @@ export default function Navbar() {
   const { isAuthenticated } = usersState;
 
   return (
-    <nav className="sticky top-0 z-10 bg-white/50 md:hidden p-4">
+    <nav className="top-0 z-10 bg-offwhite/80 md:hidden p-4">
       <div className="flex flex-wrap justify-evenly items-center gap-1 w-full">
         <div className="w-full flex justify-center">
           <Logo />
