@@ -1,6 +1,7 @@
 import express from "express";
 import checkToken from "../middleware/checkToken.js";
 import {
+  acceptOffer,
   cancelOwnOffer,
   getOffersForARequest,
   getUserOffers,
@@ -17,6 +18,7 @@ router
   .get("/:requestId", checkToken, getOffersForARequest) // GET all offers for a request
   .delete("/cancel/:offerId", checkToken, cancelOwnOffer) // DELETE own offer
   .delete("/reject/:offerId", checkToken, rejectOffer) // DELETE Reject an offer from other user
-  .patch("/:offerId", checkToken, updateOffer); // PATCH (partially update) an offer
+  .patch("/:offerId", checkToken, updateOffer) // PATCH (partially update) an offer
+  .patch("/accept/:offerId", checkToken, acceptOffer); // PATCH Accept an offer
 
 export default router;

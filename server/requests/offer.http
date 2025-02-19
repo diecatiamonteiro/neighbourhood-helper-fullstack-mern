@@ -3,35 +3,36 @@ GET http://localhost:7000/offers/my-offers
 
 
 ### Offer help to a request => /offers/:requestId
-POST http://localhost:7000/offers/67acb570526ea42d85d8b3f8
+POST http://localhost:7000/offers/67b6280d9dd69def48ed7139
 Content-Type: application/json
 
 {
-  "helperId": "67adcd35c4c83be241d12bf1",
-  "message": "I can collect your mail."
+  "helperId": "67b494dce2cfda5c261059c4",
+  "message": "user A2 can help A1."
 }
 
 
 ### Get all offers for a specific request => offers/:requestId
-GET http://localhost:7000/offers/67acb570526ea42d85d8b3fa
+GET http://localhost:7000/offers/67b626339dd69def48ed70e7
 
 
 
 ### Update offer => /offers/:offerId
-PATCH http://localhost:7000/offers/67adf8f49bfc3f7e4a10d821
+PATCH http://localhost:7000/offers/67b6295e9dd69def48ed717d
 Content-Type: application/json
 
 {
-  "message": "I can collect your mail for the next days."
+  "message": "USER A1 CAN HELP."
 }
 
-
 ### Cancel own offer => offers/cancel/:offerId
-DELETE http://localhost:7000/offers/cancel/67adf8f49bfc3f7e4a10d821
+DELETE http://localhost:7000/offers/cancel/67b5d26d3176c1ee402e63b6
 
+### Accept an offer => /offers/accept/:offerId
+PATCH http://localhost:7000/offers/accept/67b62d2a9c48cee69888b012
+Content-Type: application/json
 
-
-### Request creator rejects an offer => offers/reject/:offerId
+### Reject an offer = Request creator rejects an offer => offers/reject/:offerId
 // ❗❗ Request owner must be logged in in order to reject an offer ❗❗
 // Check request owner on the response of /offers/my-offers
-DELETE http://localhost:7000/offers/reject/67adf9569bfc3f7e4a10d83b
+DELETE http://localhost:7000/offers/reject/67b62cf19c48cee69888b003

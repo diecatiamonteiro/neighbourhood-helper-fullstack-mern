@@ -21,6 +21,7 @@ const userSchema = new Schema({
   },
   requests: [{ type: Schema.Types.ObjectId, ref: "Request" }], // Requests posted by the user
   offers: [{ type: Schema.Types.ObjectId, ref: "Offer" }], // Offers made by the user
+  offersReceived: [{ type: Schema.Types.ObjectId, ref: "Offer" }], // Offers received on user's requests
   createdAt: { type: Date, default: Date.now },
 });
 

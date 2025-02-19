@@ -5,7 +5,7 @@ import User from "../models/User.js";
 //! GET /requests - Fetch all help requests from all users
 export const getAllRequests = async (req, res, next) => {
   try {
-    const requests = await Request.find(); // Fetch all requests
+    const requests = await Request.find().populate("userId", "username firstName lastName").lean(); // Fetch all requests
 
     if (!requests || requests.length === 0) {
       return res.status(404).json({ message: "No requests found." });
@@ -28,7 +28,16 @@ export const getUserRequests = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const requests = await Request.find({ userId }).lean();
+    const requests = await Request.find({ userId })
+      .populate({
+        path: 'receivedOffers',
+        populate: {
+          path: 'helperId',
+          select: 'username firstName lastName'
+        }
+      })
+      .populate('acceptedHelper', 'username firstName lastName')
+      .lean();
 
     if (!requests.length) {
       return res.status(200).json({
@@ -55,9 +64,15 @@ export const getSpecificRequest = async (req, res, next) => {
   try {
     const request = await Request.findById(req.params.id)
       .populate("userId", "username email")
+      .populate({
+        path: 'receivedOffers',
+        populate: {
+          path: 'helperId',
+          select: 'username firstName lastName'
+        }
+      })
+      .populate('acceptedHelper', 'username firstName lastName')
       .lean();
-    // .populate() includes the user's data (username, email, createdAt) in the response.
-    // .lean() converts the Mongoose document to a plain JavaScript object, improving performance if you’re only reading data and not modifying it.
 
     if (!request) {
       throw createError(404, "Request not found.");
@@ -93,6 +108,7 @@ export const createRequest = async (req, res, next) => {
     });
 
     await User.findByIdAndUpdate(_id, { $push: { requests: request._id } });
+    
     res.status(201).json({
       success: true,
       status: 201,

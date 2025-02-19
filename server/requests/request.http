@@ -11,18 +11,18 @@ POST http://localhost:7000/requests
 Content-Type: application/json
 
 {
-  "description": "*******REQUEST FROM TEST USER 1*******",
+  "description": "*******REQUEST FROM TEST USER 1 ATTEMPT 3*******",
   "category": "Groceries",
   "when": "Today"
 }
 
 
 ### Get specific request by request ID => /requests/:id 
-GET http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+GET http://localhost:7000/requests/67b6280d9dd69def48ed7139
 
 
 ### Update a request by request ID => requests/:id
-PATCH http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+PATCH http://localhost:7000/requests/67b628969dd69def48ed714b
 Content-Type: application/json
 
 {
@@ -31,5 +31,5 @@ Content-Type: application/json
 
 
 ### Delete a request by request ID => requests/:id
-DELETE http://localhost:7000/requests/67adf8809bfc3f7e4a10d80a
+DELETE http://localhost:7000/requests/67b628649dd69def48ed7143
 

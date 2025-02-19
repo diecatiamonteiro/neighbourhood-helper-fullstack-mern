@@ -71,13 +71,46 @@ export const logout = async (req, res, next) => {
 //! Runs after checkToken middleware
 export const getUserData = async (req, res, next) => {
   try {
-    const { user, isAuthenticated } = req; // from req.user and req.isAuthenticated from checkToken middleware
+    const { isAuthenticated } = req; // from req.user and req.isAuthenticated from checkToken middleware
+
+    // Get full user data with populated relationships
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: "requests",
+        populate: {
+          path: "receivedOffers",
+          populate: {
+            path: "helperId",
+            select: "username firstName lastName",
+          },
+        },
+      })
+      .populate({
+        path: "offers",
+        populate: {
+          path: "requestId",
+          select: "description when status",
+        },
+      })
+      .populate({
+        path: "offersReceived",
+        populate: [
+          {
+            path: "helperId",
+            select: "username firstName lastName",
+          },
+          {
+            path: "requestId",
+            select: "description when status",
+          },
+        ],
+      });
 
     res.status(200).json({
       success: true,
       message: "User data fetched successfully.",
-      user: user, // returns user data
-      isAuthenticated: isAuthenticated, // returns authentication status
+      user: user,
+      isAuthenticated: isAuthenticated,
     });
   } catch (error) {
     next(error);
@@ -141,8 +174,21 @@ export const deleteUser = async (req, res, next) => {
       throw createError(404, "User not found.");
     }
 
+    // First, get all requests by the user
+    const userRequests = await Request.find({ userId });
+
+    // Delete all offers received on user's requests
+    for (const request of userRequests) {
+      await Offer.deleteMany({ requestId: request._id });
+    }
+
+    // Delete all requests by the user
     await Request.deleteMany({ userId });
+
+    // Delete all offers made by the user
     await Offer.deleteMany({ helperId: userId });
+
+    // Finally, delete the user
     await User.findByIdAndDelete(userId);
 
     res.status(200).json({

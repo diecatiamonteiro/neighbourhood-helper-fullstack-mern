@@ -39,13 +39,20 @@ export const offerHelp = async (req, res, next) => {
     // Create the new offer
     const offer = await Offer.create({ helperId, requestId, message });
 
-    // Update the request to include this offer
-    await Request.findByIdAndUpdate(requestId, {
+    // Update helper's offersGiven array
+    await User.findByIdAndUpdate(helperId, {
       $push: { offers: offer._id },
     });
 
-    // Update the user to store their offer
-    await User.findByIdAndUpdate(helperId, { $push: { offers: offer._id } });
+    // Add offer to request's receivedOffers array (new)
+    await Request.findByIdAndUpdate(requestId, {
+      $push: { receivedOffers: offer._id },
+    });
+
+    // Add offer to request owner's offersReceived array (new)
+    await User.findByIdAndUpdate(request.userId, {
+      $push: { offersReceived: offer._id },
+    });
 
     res.status(201).json({
       success: true,
@@ -215,6 +222,52 @@ export const updateOffer = async (req, res, next) => {
       status: 200,
       message: "Offer edited successfully.",
       updatedOffer: updatedOffer,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//! PATCH /offers/accept/:offerId - Request creator accepts an offer
+//! Runs after checkToken middleware
+export const acceptOffer = async (req, res, next) => {
+  try {
+    const { offerId } = req.params;
+    if (!offerId) throw createError(400, "Offer ID is required.");
+
+    // Find the offer and populate helper details
+    const offer = await Offer.findById(offerId);
+    if (!offer) throw createError(404, "Offer not found.");
+
+    // Find the request linked to this offer
+    const request = await Request.findById(offer.requestId);
+    if (!request) throw createError(404, "Associated request not found.");
+
+    // Ensure the logged-in user is the request owner
+    const userId = req.user._id;
+    if (request.userId.toString() !== userId.toString()) {
+      throw createError(403, "Only the request owner can accept offers.");
+    }
+
+    // Check if request is already helped
+    if (request.status === "helped") {
+      throw createError(400, "This request has already been helped.");
+    }
+
+    // Update request status and set accepted helper
+    const updatedRequest = await Request.findByIdAndUpdate(
+      request._id,
+      {
+        status: "helped",
+        acceptedHelper: offer.helperId,
+      },
+      { new: true }
+    ).populate("acceptedHelper", "username firstName lastName");
+
+    res.status(200).json({
+      success: true,
+      message: "Offer accepted successfully!",
+      updatedRequest,
     });
   } catch (error) {
     next(error);
