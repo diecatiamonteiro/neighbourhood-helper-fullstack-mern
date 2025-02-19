@@ -4,13 +4,18 @@ export const getAllRequests = async (requestsDispatch) => {
   try {
     const response = await axios.get("/requests");
     console.log("getAllRequests Response:", response.data);
-    requestsDispatch({ type: "GET_ALL_REQUESTS", payload: response.data });
+    requestsDispatch({
+      type: "GET_ALL_REQUESTS",
+      payload: response.data.allRequests,
+    }); // send just allRequests array from the response to the reducer
   } catch (error) {
     console.log("getAllRequests Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to get all requests.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };
 
@@ -29,6 +34,8 @@ export const getSpecificRequest = async (requestsDispatch, requestId) => {
       payload:
         error.response?.data?.message || "Failed to get specific request.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };
 
@@ -46,6 +53,8 @@ export const getUserRequests = async (requestsDispatch) => {
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to get user requests.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };
 
@@ -63,6 +72,8 @@ export const createRequest = async (requestsDispatch, requestData) => {
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to create request.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };
 
@@ -87,6 +98,8 @@ export const updateRequest = async (
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to update request.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };
 
@@ -104,5 +117,7 @@ export const deleteRequest = async (requestsDispatch, requestId) => {
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to delete request.",
     });
+  } finally {
+    requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: false });
   }
 };

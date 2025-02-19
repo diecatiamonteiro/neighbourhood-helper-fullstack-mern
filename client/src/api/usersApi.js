@@ -56,7 +56,7 @@ export const getUserData = async (usersDispatch) => {
   try {
     const response = await axios.get("/users/data");
     console.log("getUserData Response:", response.data);
-    usersDispatch({ type: "GET_USER_DATA", payload: response.data.data });
+    usersDispatch({ type: "GET_USER_DATA", payload: response.data.user });
   } catch (error) {
     console.log("getUserData Error:", error.response.data);
     // Don't dispatch error if it's just that no user is logged in (avoids error message on login & register forms)

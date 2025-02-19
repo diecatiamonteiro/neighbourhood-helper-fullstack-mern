@@ -11,6 +11,8 @@ export const getUserOffers = async (offersDispatch) => {
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to get user offers.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
 
@@ -25,8 +27,12 @@ export const postOffer = async (offersDispatch, requestId, offerData) => {
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to post offer.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
+
+//! create a new controller receiveHelp so i can fetch all offers a user received on dashboad for eg
 
 export const updateOffer = async (offersDispatch, offerId, offerData) => {
   try {
@@ -39,6 +45,8 @@ export const updateOffer = async (offersDispatch, offerId, offerData) => {
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to update offer.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
 
@@ -58,6 +66,8 @@ export const getAllOffersOnARequest = async (offersDispatch, requestId) => {
         error.response?.data?.message ||
         "Failed to get all offers on this request.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
 
@@ -75,6 +85,8 @@ export const cancelOffer = async (offersDispatch, offerId) => {
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to cancel offer.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
 
@@ -92,5 +104,7 @@ export const rejectOffer = async (offersDispatch, offerId) => {
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to reject offer.",
     });
+  } finally {
+    offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
 };
