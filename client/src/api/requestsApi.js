@@ -1,13 +1,18 @@
 import axios from "axios";
 
+// Get all requests
 export const getAllRequests = async (requestsDispatch) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get("/requests");
     console.log("getAllRequests Response:", response.data);
     requestsDispatch({
       type: "GET_ALL_REQUESTS",
-      payload: response.data.allRequests,
-    }); // send just allRequests array from the response to the reducer
+      payload: {
+        allRequests: response.data.allRequests,
+        totalRequests: response.data.totalRequests,
+      },
+    });
   } catch (error) {
     console.log("getAllRequests Error:", error.response.data);
     requestsDispatch({
@@ -19,13 +24,15 @@ export const getAllRequests = async (requestsDispatch) => {
   }
 };
 
+// Get a specific request
 export const getSpecificRequest = async (requestsDispatch, requestId) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get(`/requests/${requestId}`);
     console.log("getSpecificRequest Response:", response.data);
     requestsDispatch({
       type: "GET_SPECIFIC_REQUEST",
-      payload: response.data,
+      payload: response.data.request,
     });
   } catch (error) {
     console.log("getSpecificRequest Error:", error.response.data);
@@ -39,13 +46,18 @@ export const getSpecificRequest = async (requestsDispatch, requestId) => {
   }
 };
 
+// Get all requests for a user
 export const getUserRequests = async (requestsDispatch) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get(`/requests/my-requests`);
     console.log("getUserRequests Response:", response.data);
     requestsDispatch({
       type: "GET_USER_REQUESTS",
-      payload: response.data,
+      payload: {
+        userRequests: response.data.userRequests,
+        totalRequests: response.data.totalRequests,
+      },
     });
   } catch (error) {
     console.log("getUserRequests Error:", error.response.data);
@@ -58,13 +70,15 @@ export const getUserRequests = async (requestsDispatch) => {
   }
 };
 
+// Create a request
 export const createRequest = async (requestsDispatch, requestData) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.post(`/requests`, requestData);
     console.log("createRequest Response:", response.data);
     requestsDispatch({
       type: "CREATE_REQUEST",
-      payload: response.data,
+      payload: response.data.newRequest,
     });
   } catch (error) {
     console.log("createRequest Error:", error.response.data);
@@ -77,11 +91,13 @@ export const createRequest = async (requestsDispatch, requestData) => {
   }
 };
 
+// Update a request
 export const updateRequest = async (
   requestsDispatch,
   requestId,
   updateRequestData
 ) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.patch(
       `/requests/${requestId}`,
@@ -90,7 +106,7 @@ export const updateRequest = async (
     console.log("updateRequest Response:", response.data);
     requestsDispatch({
       type: "UPDATE_REQUEST",
-      payload: response.data,
+      payload: response.data.updatedRequest,
     });
   } catch (error) {
     console.log("updateRequest Error:", error.response.data);
@@ -103,13 +119,15 @@ export const updateRequest = async (
   }
 };
 
+// Delete a request
 export const deleteRequest = async (requestsDispatch, requestId) => {
+  requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.delete(`/requests/${requestId}`);
     console.log("deleteRequest Response:", response.data);
     requestsDispatch({
       type: "DELETE_REQUEST",
-      payload: response.data,
+      payload: requestId, // We only need the ID to remove it from state
     });
   } catch (error) {
     console.log("deleteRequest Error:", error.response.data);

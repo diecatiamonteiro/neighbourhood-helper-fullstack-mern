@@ -12,7 +12,12 @@ export const usersReducer = (state, action) => {
     case "GET_USER_DATA":
       return {
         ...state,
-        user: action.payload,
+        user: {
+          ...action.payload,
+          requests: action.payload.requests || [],
+          offers: action.payload.offers || [],
+          offersReceived: action.payload.offersReceived || [],
+        },
         isAuthenticated: true,
         error: null,
       };
@@ -20,7 +25,13 @@ export const usersReducer = (state, action) => {
     case "UPDATE_USER_DATA":
       return {
         ...state,
-        user: action.payload,
+        user: {
+          ...state.user,
+          ...action.payload.updatedUser,
+          requests: action.payload.updatedUser.requests || state.user.requests,
+          offers: action.payload.updatedUser.offers || state.user.offers,
+          offersReceived: action.payload.updatedUser.offersReceived || state.user.offersReceived,
+        },
         error: null,
       };
 

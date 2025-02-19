@@ -1,11 +1,12 @@
 export const offersInitialState = {
-  offers: [], // All offers on a specific request (from all users)
-  userOffers: [], // Only the logged-in user's offers (on all requests)
+  offers: [], // All offers on a specific request
+  userOffers: [], // Logged-in user's offers
   totalOffers: 0,
   deletedOffer: null,
-  requestOwner: null,
-  updatedOffer: null,
   rejectedOffer: null,
+  requestOwner: null, // For reject offer response
+  updatedOffer: null,
+  updatedRequest: null, // For accept offer response
   isLoading: false,
   error: null,
 };
@@ -15,7 +16,7 @@ export const offersReducer = (state, action) => {
     case "GET_USER_OFFERS":
       return {
         ...state,
-        userOffers: action.payload.userOffers,
+        userOffers: action.payload.userOffers || [],
         totalOffers: action.payload.totalOffers,
         error: null,
       };
@@ -24,19 +25,6 @@ export const offersReducer = (state, action) => {
       return {
         ...state,
         offers: [...state.offers, action.payload.data],
-        totalOffers: state.totalOffers + 1,
-        error: null,
-      };
-
-    case "UPDATE_OFFER":
-      return {
-        ...state,
-        updatedOffer: action.payload.updatedOffer,
-        offers: state.offers.map((offer) =>
-          offer._id === action.payload.updatedOffer._id
-            ? action.payload.updatedOffer
-            : offer
-        ), // Updates the offer in the offers array with the updated offer
         error: null,
       };
 
@@ -71,6 +59,25 @@ export const offersReducer = (state, action) => {
         error: null,
       };
 
+    case "UPDATE_OFFER":
+      return {
+        ...state,
+        updatedOffer: action.payload.updatedOffer,
+        offers: state.offers.map((offer) =>
+          offer._id === action.payload.updatedOffer._id
+            ? action.payload.updatedOffer
+            : offer
+        ),
+        error: null,
+      };
+
+    case "ACCEPT_OFFER":
+      return {
+        ...state,
+        updatedRequest: action.payload.updatedRequest,
+        error: null,
+      };
+
     case "SET_LOADING_OFFERS":
       return {
         ...state,
@@ -80,8 +87,7 @@ export const offersReducer = (state, action) => {
     case "SET_ERROR_OFFERS":
       return {
         ...state,
-        error: action.payload,
-      };
+        error: action.payload,}
 
     default:
       return state;

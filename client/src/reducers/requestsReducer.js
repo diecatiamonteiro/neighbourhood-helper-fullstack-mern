@@ -12,7 +12,8 @@ export const requestsReducer = (state, action) => {
     case "GET_ALL_REQUESTS":
       return {
         ...state,
-        allRequests: action.payload,
+        allRequests: action.payload.allRequests,
+        totalRequests: action.payload.totalRequests,
         error: null,
       };
 
@@ -46,7 +47,10 @@ export const requestsReducer = (state, action) => {
         ...state,
         userRequests: state.userRequests.map((request) =>
           request._id === action.payload._id ? action.payload : request
-        ), // creates a new array with the updated request (map()); means that the request with the same id as the payload will be updated with the new payload; if not, the request will remain the same.
+        ),
+        currentRequest: state.currentRequest?._id === action.payload._id 
+          ? action.payload 
+          : state.currentRequest, // creates a new array with the updated request (map()); means that the request with the same id as the payload will be updated with the new payload; if not, the request will remain the same.
         error: null,
       };
 
@@ -57,6 +61,7 @@ export const requestsReducer = (state, action) => {
           (request) => request._id !== action.payload
         ), // creates a new array with the filtered requests (filter()), keeping only requests where ID does NOT match the deleted ID; means that the request with the same id as the payload will be removed from the userRequests array
         totalRequests: state.totalRequests - 1,
+        currentRequest: state.currentRequest?._id === action.payload ? null : state.currentRequest,
         error: null,
       };
 
