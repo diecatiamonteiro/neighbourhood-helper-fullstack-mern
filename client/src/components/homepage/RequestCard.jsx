@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { DataContext } from "../../contexts/Context";
 import { postOffer } from "../../api/offersApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RequestCard({ request }) {
   const navigate = useNavigate();
@@ -35,8 +37,17 @@ export default function RequestCard({ request }) {
       await postOffer(request._id, message, offersDispatch);
       setShowModal(false);
       setMessage("");
+      toast.success(`Your offer has been sent to ${request.userId.username}!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (error) {
       console.error("Error submitting offer:", error);
+      toast.error("Failed to submit offer. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

@@ -3,6 +3,8 @@ import { DataContext } from '../../contexts/Context';
 import { getAllRequests } from '../../api/requestsApi';
 import RequestCard from './RequestCard';
 import LoadingSpinner from '../LoadingSpinner';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function RequestsSection() {
   const { requestsState, requestsDispatch } = useContext(DataContext);
