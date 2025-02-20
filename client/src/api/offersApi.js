@@ -143,16 +143,25 @@ export const acceptOffer = async (offerId, offersDispatch) => {
   try {
     const response = await axios.patch(`/offers/accept/${offerId}`);
     console.log("acceptOffer Response:", response.data);
+    
+    // Make sure we're getting the helper's username from the response
+    const helperUsername = response.data.helperUsername || 'the helper';
+    
     offersDispatch({
       type: "ACCEPT_OFFER",
-      payload: { updatedRequest: response.data.updatedRequest },
+      payload: { 
+        updatedRequest: response.data.updatedRequest,
+        helperUsername: helperUsername
+      },
     });
+    return { success: true, helperUsername: helperUsername };
   } catch (error) {
-    console.log("rejectOffer Error:", error.response.data);
+    console.log("acceptOffer Error:", error.response?.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to accept offer.",
     });
+    return { success: false, error: error.response?.data?.message };
   } finally {
     offersDispatch({ type: "SET_LOADING_OFFERS", payload: false });
   }
