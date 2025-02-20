@@ -302,69 +302,54 @@ export default function MyAccount() {
                       {/* Offers for each request */}
                       <div className="ml-4 mt-3 border-l-2 border-olive/20 pl-4">
                         <p className="font-semibold text-charcoal mb-2">
-                          Offers of Help (
-                          {(request.receivedOffers || []).length}):
+                          Offers of Help ({(request.receivedOffers || []).length}):
                         </p>
-                        {request.receivedOffers &&
-                        request.receivedOffers.length > 0 ? (
-                          request.receivedOffers.map((offer) => {
-                            console.log("Offer data:", offer);
-                            return (
-                              <div
-                                key={offer._id}
-                                className="mb-3 bg-offwhite/50 p-3 rounded-lg"
-                              >
-                                <p>
-                                  <span className="font-semibold">From:</span>{" "}
-                                  {offer.helperId?.username ||
-                                    "Unknown Neighbour"}
-                                </p>
-                                <p>
-                                  <span className="font-semibold">
-                                    Message:
-                                  </span>{" "}
-                                  {offer.message}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                  Offered on:{" "}
-                                  {format(
-                                    new Date(offer.createdAt),
-                                    "MMM d, yyyy"
-                                  )}
-                                </p>
+                        {request.receivedOffers && request.receivedOffers.length > 0 ? (
+                          request.receivedOffers.map((offer) => (
+                            <div
+                              key={offer._id}
+                              className="mb-3 bg-offwhite/50 p-3 rounded-lg"
+                            >
+                              <p>
+                                <span className="font-semibold">From:</span>{" "}
+                                {offer.helperId?.username || "Unknown Neighbour"}
+                              </p>
+                              <p>
+                                <span className="font-semibold">Message:</span>{" "}
+                                {offer.message}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                Offered on:{" "}
+                                {format(new Date(offer.createdAt), "MMM d, yyyy")}
+                              </p>
 
-                                {/* Show buttons only if request is open and offer is pending */}
-                                {request.status === "open" && !offer.status && (
-                                  <div className="flex flex-wrap gap-2 mt-2">
-                                    <button
-                                      onClick={() =>
-                                        handleAcceptHelp(offer._id)
-                                      }
-                                      className="text-sm bg-olive text-white p-2 rounded-md"
-                                    >
-                                      Accept Help
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handleRejectHelp(offer._id)
-                                      }
-                                      className="text-sm bg-red-500 text-white p-2 rounded-md"
-                                    >
-                                      Reject Help
-                                    </button>
-                                  </div>
-                                )}
+                              {/* Show buttons only if request is open */}
+                              {request.status === "open" && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  <button
+                                    onClick={() => handleAcceptHelp(offer._id)}
+                                    className="text-sm bg-olive text-white p-2 rounded-md"
+                                  >
+                                    Accept Help
+                                  </button>
+                                  <button
+                                    onClick={() => handleRejectHelp(offer._id)}
+                                    className="text-sm bg-red-500 text-white p-2 rounded-md"
+                                  >
+                                    Reject Help
+                                  </button>
+                                </div>
+                              )}
 
-                                {/* Show status message */}
-                                {request.status === "helped" && (
-                                  <div className="mt-2 p-2 bg-green-100 text-green-700 rounded-md">
-                                    Help Accepted from{" "}
-                                    {offer.helperId?.username}
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })
+                              {/* Show accepted message only if this specific offer was accepted */}
+                              {request.status === "helped" && 
+                               request.acceptedHelperId === offer.helperId?._id && (
+                                <div className="mt-2 p-2 bg-green-100 text-green-700 rounded-md">
+                                  Help Accepted from {offer.helperId?.username}
+                                </div>
+                              )}
+                            </div>
+                          ))
                         ) : (
                           <p className="text-gray-500 italic">No offers yet</p>
                         )}
