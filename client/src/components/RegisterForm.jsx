@@ -7,7 +7,7 @@ export default function RegisterForm() {
   const navigate = useNavigate();
   const { usersState, usersDispatch } = useContext(DataContext);
   const { error, isLoading } = usersState;
-  const [success, setSuccess] = useState(false);
+  const [showMessages, setShowMessages] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -28,15 +28,13 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowMessages(true);
     usersDispatch({ type: "SET_LOADING_USERS", payload: true });
 
     const result = await registerUser(usersDispatch, formData);
 
     if (result) {
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 4000);
+      navigate("/");
     }
   };
 
@@ -211,16 +209,10 @@ export default function RegisterForm() {
           </div>
         </div>
 
-        {/* Success or Error Message */}
-        {(success || error) && (
-          <div
-            className={`rounded mt-4 mb-0 p-2 md:p-3 text-sm md:text-base text-center ${
-              success ? "bg-olive/30 text-olive" : "bg-brick/30 text-brick"
-            }`}
-          >
-            {success
-              ? "Welcome to Alt-West Connect! Redirecting to homepage..."
-              : error}
+        {/* Error Message */}
+        {showMessages && error && (
+          <div className="rounded mt-4 mb-0 p-2 md:p-3 text-sm md:text-base text-center bg-brick/30 text-brick">
+            {error}
           </div>
         )}
 
@@ -230,7 +222,7 @@ export default function RegisterForm() {
           disabled={isLoading}
           className="w-full bg-brick text-white mt-0 py-2 px-4 rounded hover:bg-brickHover transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Registering..." : success ? "Registered!" : "Register"}
+          {isLoading ? "Registering..." : "Register"}
         </button>
       </div>
     </form>

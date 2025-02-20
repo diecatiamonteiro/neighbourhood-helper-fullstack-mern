@@ -7,7 +7,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const { usersState, usersDispatch } = useContext(DataContext);
   const { error, isLoading } = usersState;
-  const [success, setSuccess] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -31,10 +30,7 @@ export default function LoginForm() {
     const result = await loginUser(usersDispatch, formData);
 
     if (result) {
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      navigate("/")
     }
   };
 
@@ -93,26 +89,20 @@ export default function LoginForm() {
           </div>
         </div>
 
-        {/* Success or Error Message */}
-        {showMessages && (success || error) && (
-          <div
-            className={`rounded mt-4 mb-0 p-2 md:p-3 text-sm md:text-base text-center ${
-              success ? "bg-olive/30 text-olive" : "bg-brick/30 text-brick"
-            }`}
-          >
-            {success
-              ? "Welcome back! Redirecting to homepage..."
-              : error}
+        {/* Error Message */}
+        {showMessages && error && (
+          <div className="rounded mt-4 mb-0 p-2 md:p-3 text-sm md:text-base text-center bg-brick/30 text-brick">
+            {error}
           </div>
         )}
 
-        {/* Register Button */}
+        {/* Login Button */}
         <button
           type="submit"
           disabled={isLoading}
           className="w-full bg-brick text-white mt-0 py-2 px-4 rounded hover:bg-brickHover transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Logging in..." : success ? "Logged in!" : "Login"}
+          {isLoading ? "Logging in..." : "Login"}
         </button>
       </div>
     </form>

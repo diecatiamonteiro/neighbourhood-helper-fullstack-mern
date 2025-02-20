@@ -387,13 +387,15 @@ export default function MyAccount() {
               <div className="text-left">
                 {offersState.userOffers &&
                   offersState.userOffers.map((offer) => {
-                    console.log("My offer data:", offer);
+                    // Skip rendering if requestId is null or undefined
+                    if (!offer.requestId) return null;
+
                     const isAcceptedOffer =
-                      offer.requestId.status === "helped" &&
-                      offer.requestId.acceptedHelperId === offer.helperId._id;
+                      offer.requestId?.status === "helped" &&
+                      offer.requestId?.acceptedHelperId === offer.helperId?._id;
                     const isRejectedOffer =
-                      offer.requestId.status === "helped" &&
-                      offer.requestId.acceptedHelperId !== offer.helperId._id;
+                      offer.requestId?.status === "helped" &&
+                      offer.requestId?.acceptedHelperId !== offer.helperId?._id;
 
                     return (
                       <div
@@ -405,15 +407,15 @@ export default function MyAccount() {
                           {offer.message}
                         </p>
                         <p className="font-semibold text-lg text-olive mb-2">
-                          Request: {offer.requestId.description}
+                          Request: {offer.requestId?.description || "Request no longer available"}
                         </p>
                         <p>
                           <span className="font-semibold">When:</span>{" "}
-                          {formatWhen(offer.requestId.when)}
+                          {formatWhen(offer.requestId?.when || "N/A")}
                         </p>
                         <p>
                           <span className="font-semibold">Neighbour:</span>{" "}
-                          {offer.requestId.userId.username}
+                          {offer.requestId?.userId?.username || "Unknown"}
                         </p>
 
                         {/* Updated status display */}
@@ -428,7 +430,7 @@ export default function MyAccount() {
                         >
                           {isAcceptedOffer ? (
                             <p>
-                              {offer.requestId.userId.username} accepted your
+                              {offer.requestId?.userId?.username || "Neighbour"} accepted your
                               help!
                             </p>
                           ) : isRejectedOffer ? (
@@ -447,11 +449,11 @@ export default function MyAccount() {
                                 alert("Contact feature coming soon!")
                               }
                             >
-                              Contact {offer.requestId.userId.username}
+                              Contact {offer.requestId?.userId?.username || "Neighbour"}
                             </button>
                             <p className="text-sm text-gray-600 mt-2">
                               You can now coordinate with{" "}
-                              {offer.requestId.userId.username} to help with
+                              {offer.requestId?.userId?.username || "your neighbour"} to help with
                               their request.
                             </p>
                           </div>
@@ -459,7 +461,7 @@ export default function MyAccount() {
                       </div>
                     );
                   })}
-                {offersState.userOffers.length === 0 && (
+                {(!offersState.userOffers || offersState.userOffers.length === 0) && (
                   <p className="text-center text-gray-500">
                     You haven't made any offers yet.
                   </p>
