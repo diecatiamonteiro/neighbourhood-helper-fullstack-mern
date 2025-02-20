@@ -186,7 +186,7 @@ export default function MyAccount() {
             My Account
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 justify-center min-h-[580px]">
             {/* User Information */}
             <div className="bg-white rounded-xl shadow-lg p-6 mx-auto w-full flex flex-col justify-between">
               <div>
