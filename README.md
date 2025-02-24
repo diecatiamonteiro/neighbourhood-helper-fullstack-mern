@@ -115,7 +115,7 @@ Note: Zip Code is already set when user registers.
 
 - The register & login pages will use `/register` and `/login`.
 - The frontend will store the JWT token in localStorage or cookies to authenticate the user.
-- After login, the app will use `GET /data` to show the logged-in user’s profile or dashboard, and to keep user logged in after refreshing page.
+- After login, the app will use `GET /data` to show the logged-in user's profile or dashboard, and to keep user logged in after refreshing page.
 
 #### 5.2. Requests Routes (`/requests`)
 
@@ -134,7 +134,7 @@ Note: Zip Code is already set when user registers.
 - The homepage (`GET /requests`) will display all requests.
 - The request card (`GET /requests/:id`) will show details of a specific request.
 - The create request page/modal (`POST /requests`) will let users add a new request.
-- The user dashboard (`GET /requests?zipCode=04177`) will filter requests for the user’s neighbourhood.
+- The user dashboard (`GET /requests?zipCode=04177`) will filter requests for the user's neighbourhood.
 - The edit request page (`PUT /requests/:id`) will allow modifying a request.
 - A delete button (`DELETE /requests/:id`) will let users remove their request.
 
@@ -143,11 +143,11 @@ Note: Zip Code is already set when user registers.
 | Method | Endpoint           | Description                             | Logged in User? |
 | ------ | ------------------ | --------------------------------------- | --------------- |
 | GET    | `/my-offers`       | Fetch all offers from logged-in user    | ✅ Yes          |
-| POST   | `/:requestId`      | Allow users to offer help on a request  | ✅ Yes          |
+| POST   | `/:requestId`      | Post an offer on a request              | ✅ Yes          |
 | GET    | `/:requestId`      | Fetch all offers for a specific request | ✅ Yes          |
 | DELETE | `/cancel/:offerId` | User cancels own offers                 | ✅ Yes          |
 | DELETE | `/reject/:offerId` | User rejects offers from other users    | ✅ Yes          |
-| PATCH  | `/:id`             | Offer owner edits their offer           | ✅ Yes          |
+| PATCH  | `/:offerId`        | Offer owner edits their offer           | ✅ Yes          |
 
 #### How will the frontend use these?
 
@@ -192,7 +192,7 @@ Note: Zip Code is already set when user registers.
 
 #### 📌 User tries to perform unauthorized actions (middleware `checkOwnership`)
 
-1. User tries to edit or delete someone else’s request.
+1. User tries to edit or delete someone else's request.
 2. Server denies access (403 Forbidden).
 3. User sees error message: "You are not allowed to edit this request."
 4. User is redirected to homepage.
@@ -206,7 +206,7 @@ Note: Zip Code is already set when user registers.
    - "My Requests" (requests they posted).
    - "My Offers" (requests they offered help on).
 5. Can edit or delete their own requests.
-6. Can withdraw offers on other users’ requests.
+6. Can withdraw offers on other users' requests.
 
 #### 📌 Request owner chooses who helps them by accepting or declining help offers
 
