@@ -8,23 +8,27 @@ export const createSendToken = (user, status, res, message = "Authentication suc
     expiresIn: JWT_EXP,
   });
 
+  console.log('Creating JWT token for user:', user._id);
+
   // Set cookie options
   const cookieOptions = {
     maxAge: 10 * 60 * 1000, // 10min
     httpOnly: true,
     secure: true,
     sameSite: 'None',
+    path: '/'
   };
 
   // Send token as cookie
   res.cookie("jwtToken", jwtToken, cookieOptions);
 
-  // Send response to client (no JWT token sent because it's stored in a cookie)
+  // Also send token in response for header auth
   res.status(status).json({
     success: true,
     status,
     message,
     data: user,
+    token: jwtToken // Add token to response
   });
 };
 
