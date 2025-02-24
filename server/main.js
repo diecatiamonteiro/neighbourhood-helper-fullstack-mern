@@ -24,12 +24,15 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // Allows cookies/authentication (if needed)
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow common API requests
-    allowedHeaders: ["Content-Type", "Authorization"], // Allow standard headers
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['set-cookie']
   })
 );
 app.use(express.json()); // parses JSON bodies in the incoming requests (if any) and make them available in req.body
 app.use(cookieParser()); // parses cookies from the incoming request headers and make them available in req.cookies
+
+app.set('trust proxy', 1); // Trust first proxy
 
 app.use("/users", usersRouter);
 app.use("/requests", requestsRouter);

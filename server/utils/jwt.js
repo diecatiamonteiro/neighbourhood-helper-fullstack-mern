@@ -9,12 +9,11 @@ export const createSendToken = (user, status, res, message = "Authentication suc
   });
 
   // Set cookie options
-  const isProduction = process.env.NODE_ENV === "production"; // Check if the app is running in production
   const cookieOptions = {
     maxAge: 10 * 60 * 1000, // 10min
-    httpOnly: true, // Prevent XSS attacks (client-side scripts can't access this cookie)
-    secure: isProduction, // Send cookie only via HTTPS in production
-    sameSite: isProduction ? "None" : "Lax", // Allow cross-origin requests in production
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
   };
 
   // Send token as cookie
