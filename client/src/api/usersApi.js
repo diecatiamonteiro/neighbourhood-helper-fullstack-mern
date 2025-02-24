@@ -98,12 +98,14 @@ export const updateUserData = async (usersDispatch, updateFormData) => {
       type: "UPDATE_USER_DATA",
       payload: { updatedUser: response.data.updatedUser },
     });
+    return response.data; // Return the response data to be used in MyAccount.jsx to display user data after update
   } catch (error) {
     console.log("updateUserData Error:", error.response.data);
     usersDispatch({
       type: "SET_ERROR_USERS",
       payload: error.response?.data?.message || "Failed to update user data.",
     });
+    throw error;
   } finally {
     usersDispatch({ type: "SET_LOADING_USERS", payload: false });
   }

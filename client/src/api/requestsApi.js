@@ -55,8 +55,10 @@ export const getUserRequests = async (requestsDispatch) => {
     // Add detailed logging
     console.log("Full getUserRequests Response:", response.data);
     console.log("User Requests array:", response.data.userRequests);
-    if (response.data.userRequests && response.data.userRequests.length > 0) {
-      console.log("First request offers:", response.data.userRequests[0].offers);
+
+    // Check if offers are populated
+    if (response.data.userRequests) {
+      console.log("First request full data:", response.data.userRequests[0]);
     }
     
     requestsDispatch({
