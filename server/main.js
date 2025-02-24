@@ -15,7 +15,19 @@ import {
 await connectDB();
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // allows cross-origin requests from the FE
+const allowedOrigins = [
+  "http://localhost:5173", // Allow local development
+  "https://alt-west-connect-neighbourhood-helper.vercel.app", // Allow deployed frontend on Vercel
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // Allows cookies/authentication (if needed)
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow common API requests
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow standard headers
+  })
+);
 app.use(express.json()); // parses JSON bodies in the incoming requests (if any) and make them available in req.body
 app.use(cookieParser()); // parses cookies from the incoming request headers and make them available in req.cookies
 
