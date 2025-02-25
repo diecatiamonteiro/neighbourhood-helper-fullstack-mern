@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../contexts/Context";
 import { registerUser } from "../api/usersApi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import { loginWithGoogle } from "../api/usersApi";
+import GoogleIcon from "../components/GoogleIcon";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -37,6 +40,26 @@ export default function RegisterForm() {
       navigate("/");
     }
   };
+
+  const handleLoginWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setShowMessages(true);
+      const result = await loginWithGoogle(
+        usersDispatch,
+        tokenResponse.access_token
+      );
+      if (result) {
+        navigate("/");
+      }
+    },
+    onError: (error) => {
+      setShowMessages(true);
+      usersDispatch({
+        type: "SET_ERROR_USERS",
+        payload: "Failed to connect with Google. Please try again.",
+      });
+    },
+  });
 
   return (
     <form
@@ -216,14 +239,36 @@ export default function RegisterForm() {
           </div>
         )}
 
-        {/* Register Button */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-brick text-white mt-0 py-2 px-4 rounded hover:bg-brickHover transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? "Registering..." : "Register"}
-        </button>
+        {/* Register Buttons */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-brick text-white mt-0 py-2 px-4 rounded hover:bg-brickHover transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? "Registering..." : "Register"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLoginWithGoogle}
+            className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 py-2 px-4 rounded transition-colors duration-200 flex items-center justify-center gap-3 font-medium"
+          >
+            <GoogleIcon />
+            Register with Google
+          </button>
+        </div>
+
+        {/* Login Link */}
+        <p className="text-center mt-4 text-gray-600">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-brick hover:text-brickHover font-semibold"
+          >
+            Login
+          </Link>
+        </p>
       </div>
     </form>
   );

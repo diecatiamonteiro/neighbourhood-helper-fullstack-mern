@@ -4,7 +4,8 @@
 import axios from "axios";
 
 export const setAxiosDefaults = () => {
-  axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+  const baseURL = import.meta.env.VITE_BACKEND_URL;
+  axios.defaults.baseURL = baseURL;
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common['Content-Type'] = 'application/json';
 };

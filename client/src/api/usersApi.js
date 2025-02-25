@@ -46,6 +46,28 @@ export const loginUser = async (usersDispatch, loginFormData) => {
   }
 };
 
+// Login with Google
+export const loginWithGoogle = async (usersDispatch, accessToken) => {
+  usersDispatch({ type: "SET_LOADING_USERS", payload: true });
+  try {
+    const response = await axios.post("/users/login/google", { accessToken });
+
+    usersDispatch({
+      type: "LOGIN_USER",
+      payload: { user: response.data.data },
+    });
+    return response.data;
+  } catch (error) {
+    usersDispatch({
+      type: "SET_ERROR_USERS",
+      payload: error.response?.data?.message || "Failed to login with Google.",
+    });
+    throw error;
+  } finally {
+    usersDispatch({ type: "SET_LOADING_USERS", payload: false });
+  }
+};
+
 // Logout a user
 export const logoutUser = async (usersDispatch) => {
   usersDispatch({ type: "SET_LOADING_USERS", payload: true });
