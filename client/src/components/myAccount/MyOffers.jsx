@@ -32,7 +32,7 @@ export default function MyOffers({ offers }) {
             return (
               <div
                 key={offer._id}
-                className="border-b border-charcoal/50 pb-3 last:border-0 mb-3"
+                className="bg-offwhite/50 p-4 rounded-lg pb-4 last:border-0 mb-4"
               >
                 <p>
                   <span className="font-semibold">My Message:</span>{" "}
@@ -55,21 +55,20 @@ export default function MyOffers({ offers }) {
                 <div
                   className={`mt-2 p-2 rounded-md ${
                     isAcceptedOffer
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-green-100 border border-green-300 text-green-700"
                       : isRejectedOffer
-                      ? "bg-red-100 text-red-700"
-                      : "bg-yellow-100 text-yellow-700"
+                      ? "bg-red-100 border border-red-300 text-red-700"
+                      : "bg-yellow-100 border border-yellow-300 text-yellow-700"
                   }`}
                 >
                   {isAcceptedOffer ? (
                     <p>
-                      {offer.requestId?.userId?.username || "Neighbour"}{" "}
-                      accepted your help and will contact you to coordinate the help.
+                      Your neighbour {offer.requestId?.userId?.username || "Neighbour"} accepted your help and will contact you to coordinate the help.
                     </p>
                   ) : isRejectedOffer ? (
-                    <p>Your offer was declined</p>
+                    <p>Your neighbour {offer.requestId?.userId?.username || "Neighbour"} declined your help offer.</p>
                   ) : (
-                    <p>Waiting for response</p>
+                    <p>Waiting for response.</p>
                   )}
                 </div>
 

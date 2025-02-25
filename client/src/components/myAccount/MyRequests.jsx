@@ -111,8 +111,8 @@ export default function MyRequests({
                       {/* Show accepted message only if request is helped AND this helper is the accepted one */}
                       {request?.status === "helped" && 
                        request?.acceptedHelper?._id === offer?.helperId?._id && (
-                        <div className="flex flex-col mt-2 p-2 bg-green-100 text-green-700 rounded-md">
-                          Help Accepted from {offer?.helperId?.username || 'Unknown Neighbour'}
+                        <div className="flex flex-col mt-2 p-2 bg-green-100 border border-green-300 text-green-700 rounded-md">
+                          You accepted help from {offer?.helperId?.username || 'Unknown Neighbour'}. You must contact them to coordinate help.
                           <button
                             className="text-sm bg-olive w-fit text-white px-2 py-1 mt-2 rounded-md hover:bg-oliveHover transition-colors duration-200"
                             onClick={() => alert("Contact feature coming soon!")}
@@ -125,8 +125,8 @@ export default function MyRequests({
                       {/* Show rejected message only if request is helped AND this helper is the rejected one */}
                       {request?.status === "helped" &&
                         request?.acceptedHelper?._id !== offer?.helperId?._id && (
-                          <div className="mt-2 p-2 bg-red-100 text-red-700 rounded-md">
-                            Help Rejected from {offer?.helperId?.username || 'Unknown Neighbour'}
+                          <div className="mt-2 p-2 bg-red-100 border border-red-300 text-red-700 rounded-md">
+                            You rejected help from {offer?.helperId?.username || 'Unknown Neighbour'}.
                           </div>
                         )}
                     </div>
