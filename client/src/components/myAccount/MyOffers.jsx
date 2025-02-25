@@ -20,15 +20,6 @@ export default function MyOffers({ offers }) {
               offer.requestId?.status === "helped" &&
               offer.requestId?.acceptedHelper !== offer.helperId;
 
-            console.log('Offer details:', {
-              offerId: offer._id,
-              helperId: offer.helperId,
-              acceptedHelper: offer.requestId?.acceptedHelper,
-              status: offer.requestId?.status,
-              isAccepted: isAcceptedOffer,
-              isRejected: isRejectedOffer
-            });
-
             return (
               <div
                 key={offer._id}
@@ -63,16 +54,21 @@ export default function MyOffers({ offers }) {
                 >
                   {isAcceptedOffer ? (
                     <p>
-                      Your neighbour {offer.requestId?.userId?.username || "Neighbour"} accepted your help and will contact you to coordinate the help.
+                      Your neighbour{" "}
+                      {offer.requestId?.userId?.username || "Neighbour"}{" "}
+                      accepted your help and will contact you to coordinate the
+                      help.
                     </p>
                   ) : isRejectedOffer ? (
-                    <p>Your neighbour {offer.requestId?.userId?.username || "Neighbour"} declined your help offer.</p>
+                    <p>
+                      Your neighbour{" "}
+                      {offer.requestId?.userId?.username || "Neighbour"}{" "}
+                      declined your help offer.
+                    </p>
                   ) : (
                     <p>Waiting for response.</p>
                   )}
                 </div>
-
-              
               </div>
             );
           })}

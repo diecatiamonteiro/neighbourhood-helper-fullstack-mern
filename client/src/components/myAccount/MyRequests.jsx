@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import formatWhen from "../../utils/formatDate";
 import { format } from "date-fns";
-import { deleteRequest } from "../../api/requestsApi";
+import UpdateRequestModal from "./UpdateRequestModal";
 import { toast } from "react-toastify";
 
 export default function MyRequests({
@@ -9,7 +9,8 @@ export default function MyRequests({
   handleAcceptHelp,
   handleRejectHelp,
   handleDeleteRequest,
-  requestsDispatch,
+  setUpdateRequest,
+  setShowUpdateRequestModal,
 }) {
   if (!requests) return null;
 
@@ -54,7 +55,27 @@ export default function MyRequests({
                   {request?.createdAt ? format(new Date(request.createdAt), "MMM d, yyyy") : 'Unknown date'}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-2 mb-8">
-                  <button className="text-sm bg-olive text-white p-2 rounded-md hover:bg-oliveHover transition-colors duration-200">
+                  <button 
+                    onClick={() => {
+                      if (request?.status === "helped") {
+                        toast.warning("Cannot edit request after help has been accepted");
+                        return;
+                      }
+                      setUpdateRequest({
+                        id: request._id,
+                        category: request.category,
+                        description: request.description,
+                        when: request.when
+                      });
+                      setShowUpdateRequestModal(true);
+                    }} 
+                    className={`text-sm p-2 rounded-md transition-colors duration-200 ${
+                      request?.status === "helped" 
+                        ? "bg-gray-400 cursor-not-allowed" 
+                        : "bg-olive hover:bg-oliveHover"
+                    } text-white`}
+                    title={request?.status === "helped" ? "Cannot edit request after help has been accepted" : "Edit request"}
+                  >
                     Edit Request
                   </button>
                   <button

@@ -4,7 +4,12 @@ import "react-toastify/dist/ReactToastify.css";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { DataContext } from "../contexts/Context";
 import { getUserData } from "../api/usersApi";
-import { getUserRequests, deleteRequest } from "../api/requestsApi";
+import {
+  getUserRequests,
+  deleteRequest,
+  updateRequest as updateRequestApi,
+  getAllRequests,
+} from "../api/requestsApi";
 import { acceptOffer, getUserOffers, rejectOffer } from "../api/offersApi";
 import { updateUserData, deleteUser } from "../api/usersApi";
 import UserInformation from "../components/myAccount/UserInformation";
@@ -13,7 +18,7 @@ import MyOffers from "../components/myAccount/MyOffers";
 import UpdateProfileModal from "../components/myAccount/UpdateProfileModal";
 import UpdatePasswordModal from "../components/myAccount/UpdatePasswordModal";
 import DeleteAccountModal from "../components/myAccount/DeleteAccountModal";
-
+import UpdateRequestModal from "../components/myAccount/UpdateRequestModal";
 export default function MyAccount() {
   const {
     usersState,
@@ -28,6 +33,7 @@ export default function MyAccount() {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateRequestModal, setShowUpdateRequestModal] = useState(false);
 
   // Separate form states
   const [updateFormData, setUpdateFormData] = useState({
@@ -41,6 +47,12 @@ export default function MyAccount() {
   const [passwordFormData, setPasswordFormData] = useState({
     password: "",
     confirmPassword: "",
+  });
+
+  const [updateRequest, setUpdateRequest] = useState({
+    description: "",
+    category: "",
+    when: "",
   });
 
   useEffect(() => {
@@ -86,15 +98,14 @@ export default function MyAccount() {
   }
 
   const handleAcceptHelp = async (offerId) => {
-    console.log("Starting acceptance process for offerId:", offerId);
     const result = await acceptOffer(offerId, offersDispatch);
-    
+
     if (result.success) {
       // First update the offers state
       await getUserOffers(offersDispatch);
       // Then update the requests state
       await getUserRequests(requestsDispatch);
-      
+
       toast.success(
         `We will notify ${result.helperUsername} that you've accepted their help!`,
         {
@@ -126,7 +137,8 @@ export default function MyAccount() {
     e.preventDefault();
     try {
       const response = await updateUserData(usersDispatch, updateFormData);
-      if (response?.success) {  // Add check for successful response
+      if (response?.success) {
+        // Add check for successful response
         setShowUpdateModal(false);
         // Force a refresh of user data to ensure state is in sync
         await getUserData(usersDispatch);
@@ -178,6 +190,22 @@ export default function MyAccount() {
     }
   };
 
+  const handleUpdateRequest = async (requestId, updatedData) => {
+    try {
+      await updateRequestApi(requestsDispatch, requestId, updatedData);
+
+      // Refresh both user requests and all requests
+      await getUserRequests(requestsDispatch);
+      await getAllRequests(requestsDispatch);
+
+      setShowUpdateRequestModal(false);
+      toast.success("Request updated successfully");
+    } catch (error) {
+      console.error("Update error:", error);
+      toast.error("Failed to update request. Please try again.");
+    }
+  };
+
   return (
     <div>
       <ToastContainer />
@@ -200,7 +228,10 @@ export default function MyAccount() {
               handleAcceptHelp={handleAcceptHelp}
               handleRejectHelp={handleRejectHelp}
               handleDeleteRequest={handleDeleteRequest}
+              handleUpdateRequest={handleUpdateRequest}
               requestsDispatch={requestsDispatch}
+              setUpdateRequest={setUpdateRequest}
+              setShowUpdateRequestModal={setShowUpdateRequestModal}
             />
 
             <MyOffers offers={offersState.userOffers} />
@@ -228,6 +259,14 @@ export default function MyAccount() {
         showDeleteModal={showDeleteModal}
         setShowDeleteModal={setShowDeleteModal}
         handleDeleteAccount={handleDeleteAccount}
+      />
+
+      <UpdateRequestModal
+        showUpdateRequestModal={showUpdateRequestModal}
+        setShowUpdateRequestModal={setShowUpdateRequestModal}
+        updateRequest={updateRequest}
+        setUpdateRequest={setUpdateRequest}
+        handleUpdateRequest={handleUpdateRequest}
       />
     </div>
   );
