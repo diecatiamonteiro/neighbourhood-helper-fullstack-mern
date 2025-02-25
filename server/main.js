@@ -16,17 +16,17 @@ await connectDB();
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173", // Allow local development
-  "https://alt-west-connect-neighbourhood-helper.vercel.app", // Allow deployed frontend on Vercel
+  "http://localhost:5173", // Local development
+  "https://alt-west-connect-neighbourhood-helper.vercel.app", // Production
 ];
 
 app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // Allows cookies/authentication (if needed)
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['set-cookie']
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "accessToken"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 app.use(express.json()); // parses JSON bodies in the incoming requests (if any) and make them available in req.body

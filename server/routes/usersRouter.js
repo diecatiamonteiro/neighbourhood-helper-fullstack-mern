@@ -2,6 +2,7 @@ import express from "express";
 import {
   getUserData,
   login,
+  loginWithGoogle,
   logout,
   register,
   updateUser,
@@ -14,6 +15,7 @@ const router = express.Router();
 router
   .post("/register", register) // POST create a new user
   .post("/login", login) // POST login an existing user
+  .post("/login/google", loginWithGoogle) // POST registration and login with Google (2in1)
   .get("/logout", logout) // GET logout the current user
   .get("/data", checkToken, getUserData) // GET logged-in user data
   .patch("/update", checkToken, updateUser) // PATCH update user data

@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import Request from "../models/Request.js";
 import Offer from "../models/Offer.js";
 import { createSendToken } from "../utils/jwt.js";
+import axios from "axios";
 
 //! POST /users/register - Register a new user
 export const register = async (req, res, next) => {
@@ -43,6 +44,50 @@ export const login = async (req, res, next) => {
 
     createSendToken(user, 200, res, "User successfully logged in.");
   } catch (error) {
+    next(error);
+  }
+};
+
+export const loginWithGoogle = async (req, res, next) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) {
+      return next(createError(400, "Access token is required"));
+    }
+
+    const response = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const googleUser = response.data;
+    if (!googleUser.email) {
+      return next(createError(400, "Email not provided by Google"));
+    }
+
+    // Check if user exists
+    let user = await User.findOne({ email: googleUser.email });
+
+    // Create new user if doesn't exist
+    if (!user) {
+      user = await User.create({
+        email: googleUser.email,
+        username: googleUser.name || googleUser.email.split("@")[0],
+        firstName: googleUser.given_name || "",
+        lastName: googleUser.family_name || "",
+        password: accessToken.slice(-10), // Use last 10 chars of access token as password
+        zipCode: "04177 Lindenau, Alt-Lindenau, Neu-Lindenau",
+      });
+    }
+
+    // Create and send JWT token
+    createSendToken(user, 200, res, "Google login successful");
+  } catch (error) {
+    console.error("Google login error:", error);
     next(error);
   }
 };
