@@ -1,22 +1,23 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { DataContext } from '../contexts/Context';
-import { createRequest } from '../api/requestsApi';
+import React, { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { DataContext } from "../contexts/Context";
+import { createRequest } from "../api/requestsApi";
+import { getCurrentDateTime } from "../utils/getCurrentDateTime";
 
 export default function AskForHelp() {
   const navigate = useNavigate();
   const { requestsDispatch } = useContext(DataContext);
   const [formData, setFormData] = useState({
-    description: '',
-    category: '',
-    when: ''
+    description: "",
+    category: "",
+    when: "",
   });
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -25,9 +26,9 @@ export default function AskForHelp() {
     await createRequest(requestsDispatch, formData);
     // Clear form data
     setFormData({
-      description: '',
-      category: '',
-      when: ''
+      description: "",
+      category: "",
+      when: "",
     });
     setShowSuccess(true);
     // Automatically hide success message after 5 seconds
@@ -39,12 +40,14 @@ export default function AskForHelp() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-charcoal mb-8">Ask for Help</h1>
-      
+
       {showSuccess && (
         <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
-          <p className="text-green-700 mb-2">Your request has been successfully created!</p>
-          <Link 
-            to="/#requests-section" 
+          <p className="text-green-700 mb-2">
+            Your request has been successfully created!
+          </p>
+          <Link
+            to="/#requests-section"
             className="text-blue-600 hover:text-blue-800 underline"
           >
             View all requests on homepage
@@ -54,7 +57,10 @@ export default function AskForHelp() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="category"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Category
           </label>
           <select
@@ -79,7 +85,10 @@ export default function AskForHelp() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Description
           </label>
           <textarea
@@ -95,7 +104,10 @@ export default function AskForHelp() {
         </div>
 
         <div>
-          <label htmlFor="when" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="when"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             When do you need help?
           </label>
           <input
@@ -103,6 +115,7 @@ export default function AskForHelp() {
             id="when"
             name="when"
             value={formData.when}
+            min={getCurrentDateTime()}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md"

@@ -1,4 +1,5 @@
 import React from "react";
+import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
 
 export default function UpdateRequestModal({
   showUpdateRequestModal,
@@ -73,14 +74,15 @@ export default function UpdateRequestModal({
               />
             </div>
             <div>
-          <label htmlFor="when" className="block text-sm font-medium text-gray-700 mb-1">
-            When do you need help?
-          </label>
-          <input
+              <label htmlFor="when" className="block text-sm font-medium text-gray-700 mb-1">
+                When do you need help?
+              </label>
+              <input
                 type="datetime-local"
                 id="when"
                 name="when"
                 value={updateRequest.when}
+                min={getCurrentDateTime()}
                 onChange={(e) =>
                   setUpdateRequest((prev) => ({
                     ...prev,
@@ -89,8 +91,8 @@ export default function UpdateRequestModal({
                 }
                 required
                 className="w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
+              />
+            </div>
           </div>
           <div className="flex justify-end gap-4 mt-6">
             <button
