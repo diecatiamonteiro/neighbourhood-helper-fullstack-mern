@@ -171,6 +171,7 @@ export default function MyAccount() {
   const handleDeleteAccount = async () => {
     try {
       await deleteUser(usersDispatch);
+      await getAllRequests(requestsDispatch); // Refresh requests to remove deleted user's requests from homepage
       toast.success("Account deleted successfully");
       window.location.href = "/"; // Redirect to homepage after successful deletion
     } catch (error) {
@@ -182,8 +183,8 @@ export default function MyAccount() {
     try {
       await deleteRequest(requestsDispatch, requestId);
       await getUserRequests(requestsDispatch); // Refresh the requests list after deletion
-      setShowDeleteRequestModal(false);  
-      setRequestToDelete(null);  
+      setShowDeleteRequestModal(false);
+      setRequestToDelete(null);
       toast.success("Request deleted successfully");
     } catch (error) {
       toast.error("Failed to delete request. Please try again.");
