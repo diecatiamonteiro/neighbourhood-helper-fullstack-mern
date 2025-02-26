@@ -64,7 +64,7 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-8 mt-6 md:mt-14 bg-white/50 rounded-lg shadow-md"
+      className="max-w-2xl mx-auto p-8 mt-24 lg:mt-14 bg-white/50 rounded-lg shadow-md"
     >
       <h2 className="text-lg md:text-2xl font-semibold mb-2">
         Welcome, Alt-West Neighbour!
