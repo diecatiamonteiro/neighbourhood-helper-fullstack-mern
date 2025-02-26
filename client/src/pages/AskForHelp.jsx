@@ -38,8 +38,8 @@ export default function AskForHelp() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-charcoal mb-8">Ask for Help</h1>
+    <div className="max-w-2xl mx-auto px-4 py-8 mt-16 lg:mt-0">
+      <h1 className="text-2xl lg:text-4xl font-bold text-charcoal mb-8 ">Ask for Help</h1>
 
       {showSuccess && (
         <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">

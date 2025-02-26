@@ -23,10 +23,10 @@ export default function About() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 mt-16 lg:mt-0">
       {/* Platform Info Section */}
       <section className="mb-12">
-        <h1 className="text-4xl font-bold text-charcoal mb-6">About Alt-West Connect</h1>
+        <h1 className="text-2xl lg:text-4xl font-bold text-charcoal mb-6">About Alt-West Connect</h1>
         <img src={logo} alt="Alt-West Connect Logo" className="w-32 h-32 mb-4 mx-auto" />
         <p className="text-lg text-gray-700 mb-4">
           Welcome to Alt-West Connect, where we believe in the power of neighbourhood support and community connection. 

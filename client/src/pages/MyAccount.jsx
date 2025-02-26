@@ -210,13 +210,13 @@ export default function MyAccount() {
   return (
     <div>
       <ToastContainer />
-      <div className="bg-offwhite/80 backdrop-blur-sm py-16 md:py-24">
+      <div className="bg-offwhite/80 backdrop-blur-sm pb-16 md:pb-24 mt-24 lg:mt-12">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+          <h1 className="text-2xl lg:text-4xl font-bold text-charcoal mb-12 text-center">
             My Account
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 justify-center min-h-[580px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 justify-center min-h-[1600px] lg:min-h-[350px]">
             <UserInformation
               user={usersState.user?.user}
               setShowUpdateModal={setShowUpdateModal}

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { DataContext } from "../../contexts/Context";
 import { Link } from "react-router-dom";
 import LoginBtn from "./LoginBtn";
@@ -6,37 +6,43 @@ import Logo from "./Logo";
 import RegisterBtn from "./RegisterBtn";
 import LogoutBtn from "./LogoutBtn";
 import MyAccountBtn from "./MyAccountBtn";
+import HamburgerBtnMobile from "./HamburgerBtnMobile";
+import DropdownMobile from "./DropDownMobile";
 
 export default function Navbar() {
   const { usersState, usersDispatch } = useContext(DataContext);
   const { isAuthenticated } = usersState;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <nav className="top-0 z-10 bg-offwhite/80 md:hidden p-4">
-      <div className="flex flex-wrap justify-evenly items-center gap-1 w-full">
-        <div className="w-full flex justify-center">
+    <nav 
+      ref={navRef} 
+      className="fixed top-0 left-0 right-0 z-50 bg-offwhite/90 lg:hidden p-4"
+    >
+      <div className="">
+        <div className="w-full flex justify-between items-center">
           <Logo />
+          <HamburgerBtnMobile
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
         </div>
 
-        <div className="text-base lg:text-lg text-charcoal leading-none px-4 py-2 rounded-md">
-          <Link to={"/"} className="text-base font-semibold lg:text-lg">
-            Connect With Neighbours Now!
-          </Link>
-        </div>
-
-        <div className="flex gap-4 justify-center">
-          {isAuthenticated ? (
-            <>
-              <LogoutBtn />
-              <MyAccountBtn />
-            </>
-          ) : (
-            <>
-              <LoginBtn />
-              <RegisterBtn />
-            </>
-          )}
-        </div>
+        <DropdownMobile isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       </div>
     </nav>
   );

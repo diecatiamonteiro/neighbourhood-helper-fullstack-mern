@@ -21,7 +21,7 @@ export default function HeroSection() {
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
       {/* Gradient overlay div */}
-      <div className="absolute inset-0 bg-gradient-to-r from-charcoal/85 to-transparent">
+      <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-charcoal/85 to-transparent">
         <div className="h-full flex items-center">
           {/* Text content div */}
           <div className="max-w-xl px-8 md:px-16 py-12">
@@ -34,7 +34,9 @@ export default function HeroSection() {
                 Alt-West Leipzig
               </span>
             </h1>
-            <h2 className="text-xl md:text-2xl text-white font-light leading-relaxed mb-12">
+            <h2
+              className="text-xl md:text-2xl bg-olive/60 px-4 py-2 md:px-0 md:py-0 rounded-lg md:bg-transparent text-white md:font-light leading-relaxed mb-12"
+            >
               Join your neighbours in building a connected community through
               mutual support and assistance.
             </h2>
@@ -59,19 +61,31 @@ export default function HeroSection() {
 
             {/* Stats section */}
             <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm">
-              <div className="container mx-auto px-8 py-3">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-beige text-center font-semibold">
+              <div className="container mx-auto px-2 lg:px-8 py-3">
+                <div className="grid grid-cols-3 gap-8 text-beige text-center font-semibold">
                   <div>
-                    <div className="text-3xl font-bold text-offwhite">500+</div>
-                    <div className="text-sm mt-1">Community Members</div>
+                    <div className="text-base lg:text-3xl font-bold text-offwhite">
+                      500+
+                    </div>
+                    <div className="text-xs lg:text-sm mt-1">
+                      Community Members
+                    </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-offwhite">200+</div>
-                    <div className="text-sm mt-1">Successful Connections</div>
+                    <div className="text-base lg:text-3xl font-bold text-offwhite">
+                      200+
+                    </div>
+                    <div className="text-xs lg:text-sm mt-1">
+                      Successful Connections
+                    </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-offwhite">24/7</div>
-                    <div className="text-sm mt-1">Community Support</div>
+                    <div className="text-base lg:text-3xl font-bold text-offwhite">
+                      24/7
+                    </div>
+                    <div className="text-xs lg:text-sm mt-1">
+                      Community Support
+                    </div>
                   </div>
                 </div>
               </div>
