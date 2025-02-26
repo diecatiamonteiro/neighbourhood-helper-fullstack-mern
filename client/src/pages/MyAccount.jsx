@@ -104,9 +104,7 @@ export default function MyAccount() {
     const result = await acceptOffer(offerId, offersDispatch);
 
     if (result.success) {
-      // First update the offers state
       await getUserOffers(offersDispatch);
-      // Then update the requests state
       await getUserRequests(requestsDispatch);
 
       toast.success(

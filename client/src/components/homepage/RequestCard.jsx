@@ -2,30 +2,40 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { DataContext } from "../../contexts/Context";
-import { postOffer } from "../../api/offersApi";
-import { toast, ToastContainer } from "react-toastify";
+import { postOffer, getUserOffers } from "../../api/offersApi";
+import formatWhen from "../../utils/formatDate";
+import { toast } from "react-toastify";
+import OfferHelpModal from "./OfferHelpModal";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function RequestCard({ request }) {
   const navigate = useNavigate();
-  const { usersState, offersDispatch } = useContext(DataContext);
+  const { usersState, offersDispatch, offersState } = useContext(DataContext);
   const { isAuthenticated, user } = usersState;
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      getUserOffers(offersDispatch);
+    }
+  }, [isAuthenticated, user, offersDispatch]);
+
+  const hasUserMadeOffer = () => {
+    if (!offersState?.userOffers) return false;
+
+    return offersState.userOffers.some(
+      (offer) =>
+        offer?.requestId?._id === request?._id && offer.status !== "cancelled"
+    );
+  };
 
   const handleOfferHelp = () => {
     if (!isAuthenticated || !user) {
       navigate("/login");
       return;
     }
-
-    // Don't allow users to offer help on their own requests
-    if (user._id === request.userId._id) {
-      console.log("You cannot offer help on your own request");
-      return;
-    }
-
     setShowModal(true);
   };
 
@@ -35,48 +45,30 @@ export default function RequestCard({ request }) {
 
     try {
       await postOffer(request._id, message, offersDispatch);
+      await getUserOffers(offersDispatch);
+
       setShowModal(false);
       setMessage("");
-      toast.success(`Your offer has been sent to ${request.userId.username}!`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success(`Your offer has been sent to ${request.userId.username}!`);
     } catch (error) {
-      console.error("Error submitting offer:", error);
-      toast.error("Failed to submit offer. Please try again.");
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to submit offer. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const formatWhen = (whenString) => {
-    // Try to parse the string as a date
-    const date = new Date(whenString);
-
-    // Check if it's a valid date (will be true for datetime strings like "2025-02-19T02:24")
-    if (date instanceof Date && !isNaN(date)) {
-      return format(date, "MMM d, yyyy, HH:mm");
-    }
-
-    // If it's not a valid date, return the original string (e.g., "Next week")
-    return whenString;
-  };
-
   return (
     <>
       <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow relative">
-        {/* Category & Status */}
         <div className="flex items-center justify-center mb-6">
           <span className="px-4 py-2 bg-olive/10 text-olive rounded-full border border-olive text-sm font-semibold">
             {request.category}
           </span>
         </div>
 
-        {/* Description, When & Username */}
         <div className="flex flex-col items-start">
           <p className="text-charcoal font-semibold text-lg mb-3 min-h-[80px]">
             {request.description}
@@ -93,7 +85,6 @@ export default function RequestCard({ request }) {
           </div>
         </div>
 
-        {/* Date of posting & Action Button */}
         <div className="flex justify-between items-center mt-6">
           <div className="text-gray-600 space-y-2">
             <p className="text-sm">
@@ -104,62 +95,42 @@ export default function RequestCard({ request }) {
           <button
             onClick={handleOfferHelp}
             disabled={
-              request.status !== "open" || user?._id === request.userId._id
+              isAuthenticated &&
+              (request.status !== "open" ||
+                user?.user?._id === request?.userId?._id ||
+                hasUserMadeOffer())
             }
             className={`bg-brick hover:bg-brickHover text-white px-8 py-3 rounded-lg text-base font-semibold 
               transition-all duration-300 transform hover:-translate-y-1
               ${
-                request.status !== "open" || user?._id === request.userId._id
+                isAuthenticated &&
+                (request.status !== "open" ||
+                  user?.user?._id === request?.userId?._id ||
+                  hasUserMadeOffer())
                   ? "opacity-50 cursor-not-allowed hover:transform-none"
                   : ""
               }`}
           >
-            Offer Help
+            {isAuthenticated
+              ? user?.user?._id === request?.userId?._id
+                ? "Your Request"
+                : hasUserMadeOffer()
+                ? "Offer Sent"
+                : "Offer Help"
+              : "Offer Help"}
           </button>
         </div>
       </div>
 
-      {/* Offer Help Modal - Positioned next to specific request */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div
-            className="bg-white rounded-xl p-6 max-w-md w-full"
-            style={{
-              position: "fixed",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <h3 className="text-xl font-bold text-charcoal mb-4">Offer Help</h3>
-            <form onSubmit={handleSubmitOffer}>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Write a message to your neighbor..."
-                className="w-full p-3 border border-gray-300 rounded-lg mb-4 min-h-[100px]"
-                required
-                autoFocus
-              />
-              <div className="flex justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-brick hover:bg-brickHover text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50"
-                >
-                  {isSubmitting ? "Submitting..." : "Submit Offer"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <OfferHelpModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          message={message}
+          setMessage={setMessage}
+          isSubmitting={isSubmitting}
+          handleSubmitOffer={handleSubmitOffer}
+        />
       )}
     </>
   );
