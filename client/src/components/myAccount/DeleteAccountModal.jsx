@@ -1,11 +1,11 @@
 import React from "react";
 
 export default function DeleteAccountModal({
-  showDeleteModal,
-  setShowDeleteModal,
+  showDeleteAccountModal,
+  setShowDeleteAccountModal,
   handleDeleteAccount,
 }) {
-  if (!showDeleteModal) return null;
+  if (!showDeleteAccountModal) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -18,7 +18,7 @@ export default function DeleteAccountModal({
         <div className="flex justify-end gap-4">
           <button
             type="button"
-            onClick={() => setShowDeleteModal(false)}
+            onClick={() => setShowDeleteAccountModal(false)}
             className="px-4 py-2 text-gray-600 hover:text-gray-800"
           >
             Cancel

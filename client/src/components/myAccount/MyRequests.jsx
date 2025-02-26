@@ -11,6 +11,8 @@ export default function MyRequests({
   handleDeleteRequest,
   setUpdateRequest,
   setShowUpdateRequestModal,
+  setShowDeleteRequestModal,
+  setRequestToDelete,
 }) {
   if (!requests) return null;
 
@@ -79,7 +81,12 @@ export default function MyRequests({
                     Edit Request
                   </button>
                   <button
-                    onClick={() => request?._id && handleDeleteRequest(request._id)}
+                    onClick={() => {
+                      if (request?._id) {
+                        setRequestToDelete(request._id);
+                        setShowDeleteRequestModal(true);
+                      }
+                    }}
                     className="text-sm bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors duration-200"
                   >
                     Delete Request

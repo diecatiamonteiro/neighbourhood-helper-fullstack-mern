@@ -19,6 +19,8 @@ import UpdateProfileModal from "../components/myAccount/UpdateProfileModal";
 import UpdatePasswordModal from "../components/myAccount/UpdatePasswordModal";
 import DeleteAccountModal from "../components/myAccount/DeleteAccountModal";
 import UpdateRequestModal from "../components/myAccount/UpdateRequestModal";
+import DeleteRequestModal from "../components/myAccount/DeleteRequestModal";
+
 export default function MyAccount() {
   const {
     usersState,
@@ -32,10 +34,11 @@ export default function MyAccount() {
   // Separate modals for different actions
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [showUpdateRequestModal, setShowUpdateRequestModal] = useState(false);
+  const [showDeleteRequestModal, setShowDeleteRequestModal] = useState(false);
+  const [requestToDelete, setRequestToDelete] = useState(null);
 
-  // Separate form states
   const [updateFormData, setUpdateFormData] = useState({
     username: "",
     firstName: "",
@@ -178,15 +181,14 @@ export default function MyAccount() {
   };
 
   const handleDeleteRequest = async (requestId) => {
-    if (window.confirm("Are you sure you want to delete this request?")) {
-      try {
-        await deleteRequest(requestsDispatch, requestId);
-        // Refresh the requests list after deletion
-        await getUserRequests(requestsDispatch);
-        toast.success("Request deleted successfully");
-      } catch (error) {
-        toast.error("Failed to delete request. Please try again.");
-      }
+    try {
+      await deleteRequest(requestsDispatch, requestId);
+      await getUserRequests(requestsDispatch); // Refresh the requests list after deletion
+      setShowDeleteRequestModal(false);  
+      setRequestToDelete(null);  
+      toast.success("Request deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete request. Please try again.");
     }
   };
 
@@ -220,7 +222,7 @@ export default function MyAccount() {
               user={usersState.user?.user}
               setShowUpdateModal={setShowUpdateModal}
               setShowPasswordModal={setShowPasswordModal}
-              setShowDeleteModal={setShowDeleteModal}
+              setShowDeleteAccountModal={setShowDeleteAccountModal}
             />
 
             <MyRequests
@@ -232,6 +234,8 @@ export default function MyAccount() {
               requestsDispatch={requestsDispatch}
               setUpdateRequest={setUpdateRequest}
               setShowUpdateRequestModal={setShowUpdateRequestModal}
+              setShowDeleteRequestModal={setShowDeleteRequestModal}
+              setRequestToDelete={setRequestToDelete}
             />
 
             <MyOffers offers={offersState.userOffers} />
@@ -256,8 +260,8 @@ export default function MyAccount() {
       />
 
       <DeleteAccountModal
-        showDeleteModal={showDeleteModal}
-        setShowDeleteModal={setShowDeleteModal}
+        showDeleteAccountModal={showDeleteAccountModal}
+        setShowDeleteAccountModal={setShowDeleteAccountModal}
         handleDeleteAccount={handleDeleteAccount}
       />
 
@@ -267,6 +271,13 @@ export default function MyAccount() {
         updateRequest={updateRequest}
         setUpdateRequest={setUpdateRequest}
         handleUpdateRequest={handleUpdateRequest}
+      />
+
+      <DeleteRequestModal
+        showDeleteRequestModal={showDeleteRequestModal}
+        setShowDeleteRequestModal={setShowDeleteRequestModal}
+        handleDeleteRequest={handleDeleteRequest}
+        requestId={requestToDelete}
       />
     </div>
   );

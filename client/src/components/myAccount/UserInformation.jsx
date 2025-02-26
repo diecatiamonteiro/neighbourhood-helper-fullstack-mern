@@ -4,7 +4,7 @@ export default function UserInformation({
   user,
   setShowUpdateModal,
   setShowPasswordModal,
-  setShowDeleteModal,
+  setShowDeleteAccountModal,
 }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mx-auto w-full flex flex-col justify-between">
@@ -57,7 +57,7 @@ export default function UserInformation({
                 Change Password
               </button>
               <button
-                onClick={() => setShowDeleteModal(true)}
+                onClick={() => setShowDeleteAccountModal(true)}
                 className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-200"
               >
                 Delete Account
