@@ -15,7 +15,7 @@ export const createSendToken = (
 
   // Set cookie options
   const cookieOptions = {
-    maxAge: 10 * 60 * 1000, // 10min
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
     httpOnly: true,
     secure: true,
     sameSite: "None",

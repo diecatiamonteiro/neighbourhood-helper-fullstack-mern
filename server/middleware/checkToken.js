@@ -5,7 +5,7 @@ import User from "../models/User.js";
 const checkToken = async (req, res, next) => {
   try {
     const jwtToken = req.cookies.jwtToken;
-    if (!jwtToken) throw createError(401, "Unauthorized request.");
+    if (!jwtToken) throw createError(401, "Please log in to continue.");
 
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
 
