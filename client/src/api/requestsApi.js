@@ -5,7 +5,6 @@ export const getAllRequests = async (requestsDispatch) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get("/requests");
-    console.log("getAllRequests Response:", response.data);
     requestsDispatch({
       type: "GET_ALL_REQUESTS",
       payload: {
@@ -14,7 +13,6 @@ export const getAllRequests = async (requestsDispatch) => {
       },
     });
   } catch (error) {
-    console.log("getAllRequests Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to get all requests.",
@@ -29,13 +27,11 @@ export const getSpecificRequest = async (requestsDispatch, requestId) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get(`/requests/${requestId}`);
-    console.log("getSpecificRequest Response:", response.data);
     requestsDispatch({
       type: "GET_SPECIFIC_REQUEST",
       payload: response.data.request,
     });
   } catch (error) {
-    console.log("getSpecificRequest Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload:
@@ -51,16 +47,7 @@ export const getUserRequests = async (requestsDispatch) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.get(`/requests/my-requests`);
-    
-    // Add detailed logging
-    console.log("Full getUserRequests Response:", response.data);
-    console.log("User Requests array:", response.data.userRequests);
-
-    // Check if offers are populated
-    if (response.data.userRequests) {
-      console.log("First request full data:", response.data.userRequests[0]);
-    }
-    
+      
     requestsDispatch({
       type: "GET_USER_REQUESTS",
       payload: {
@@ -69,7 +56,6 @@ export const getUserRequests = async (requestsDispatch) => {
       },
     });
   } catch (error) {
-    console.log("getUserRequests Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to get user requests.",
@@ -84,13 +70,11 @@ export const createRequest = async (requestsDispatch, requestData) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.post(`/requests`, requestData);
-    console.log("createRequest Response:", response.data);
     requestsDispatch({
       type: "CREATE_REQUEST",
       payload: response.data.newRequest,
     });
   } catch (error) {
-    console.log("createRequest Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to create request.",
@@ -112,13 +96,11 @@ export const updateRequest = async (
       `/requests/${requestId}`,
       updateRequestData
     );
-    console.log("updateRequest Response:", response.data);
     requestsDispatch({
       type: "UPDATE_REQUEST",
       payload: response.data.updatedRequest,
     });
   } catch (error) {
-    console.log("updateRequest Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to update request.",
@@ -133,13 +115,11 @@ export const deleteRequest = async (requestsDispatch, requestId) => {
   requestsDispatch({ type: "SET_LOADING_REQUESTS", payload: true });
   try {
     const response = await axios.delete(`/requests/${requestId}`);
-    console.log("deleteRequest Response:", response.data);
     requestsDispatch({
       type: "DELETE_REQUEST",
       payload: requestId, // We only need the ID to remove it from state
     });
   } catch (error) {
-    console.log("deleteRequest Error:", error.response.data);
     requestsDispatch({
       type: "SET_ERROR_REQUESTS",
       payload: error.response?.data?.message || "Failed to delete request.",

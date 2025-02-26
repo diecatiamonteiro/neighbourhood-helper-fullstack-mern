@@ -5,7 +5,6 @@ export const getUserOffers = async (offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.get("/offers/my-offers");
-    console.log("getUserOffers Response:", response.data);
     offersDispatch({
       type: "GET_USER_OFFERS",
       payload: {
@@ -14,7 +13,6 @@ export const getUserOffers = async (offersDispatch) => {
       },
     });
   } catch (error) {
-    console.log("getUserOffers Error:", error.response.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to get user offers.",
@@ -29,14 +27,12 @@ export const postOffer = async (requestId, message, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.post(`/offers/${requestId}`, { message });
-    console.log("postOffer Response:", response.data);
 
     offersDispatch({
       type: "POST_OFFER",
       payload: { data: response.data.data },
     });
   } catch (error) {
-    console.log("postOffer Error:", error.response.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to post offer.",
@@ -51,7 +47,6 @@ export const getAllOffersOnARequest = async (requestId, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.get(`/offers/${requestId}`);
-    console.log("getAllOffersOnARequest Response:", response.data);
     offersDispatch({
       type: "GET_ALL_OFFERS_ON_A_REQUEST",
       payload: {
@@ -76,13 +71,11 @@ export const cancelOffer = async (offerId, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.delete(`/offers/cancel/${offerId}`);
-    console.log("cancelOffer Response:", response.data);
     offersDispatch({
       type: "CANCEL_OFFER",
       payload: { deletedOffer: response.data.deletedOffer },
     });
   } catch (error) {
-    console.log("postOffer Error:", error.response.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to cancel offer.",
@@ -97,7 +90,6 @@ export const rejectOffer = async (offerId, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.delete(`/offers/reject/${offerId}`);
-    console.log("rejectOffer Response:", response.data);
     offersDispatch({
       type: "REJECT_OFFER",
       payload: {
@@ -106,7 +98,6 @@ export const rejectOffer = async (offerId, offersDispatch) => {
       },
     });
   } catch (error) {
-    console.log("getAllOffersOnARequest Error:", error.response.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to reject offer.",
@@ -121,13 +112,11 @@ export const updateOffer = async (offerId, message, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.patch(`/offers/${offerId}`, { message });
-    console.log("updateOffer Response:", response.data);
     offersDispatch({
       type: "UPDATE_OFFER",
       payload: { updatedOffer: response.data.updatedOffer },
     });
   } catch (error) {
-    console.log("cancelOffer Error:", error.response.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to update offer.",
@@ -142,7 +131,6 @@ export const acceptOffer = async (offerId, offersDispatch) => {
   offersDispatch({ type: "SET_LOADING_OFFERS", payload: true });
   try {
     const response = await axios.patch(`/offers/accept/${offerId}`);
-    console.log("acceptOffer Response:", response.data);
     
     // Make sure we're getting the helper's username from the response
     const helperUsername = response.data.helperUsername || 'the helper';
@@ -156,7 +144,6 @@ export const acceptOffer = async (offerId, offersDispatch) => {
     });
     return { success: true, helperUsername: helperUsername };
   } catch (error) {
-    console.log("acceptOffer Error:", error.response?.data);
     offersDispatch({
       type: "SET_ERROR_OFFERS",
       payload: error.response?.data?.message || "Failed to accept offer.",
