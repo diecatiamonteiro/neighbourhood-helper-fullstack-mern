@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../contexts/Context";
 import { loginUser, loginWithGoogle } from "../api/usersApi";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import GoogleIcon from "../components/GoogleIcon";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { usersState, usersDispatch } = useContext(DataContext);
   const { error, isLoading } = usersState;
   const [showMessages, setShowMessages] = useState(false);
@@ -32,7 +33,7 @@ export default function LoginForm() {
     const result = await loginUser(usersDispatch, formData);
 
     if (result) {
-      navigate("/");
+      navigate(location.state?.returnTo || '/');
     }
   };
 
@@ -44,7 +45,8 @@ export default function LoginForm() {
         tokenResponse.access_token
       );
       if (result) {
-        navigate("/");
+        console.log('Navigating to (Google):', location.state?.returnTo || '/');
+        navigate(location.state?.returnTo || '/');
       }
     },
     onError: (error) => {
@@ -59,7 +61,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-8 mt-6 mt-24 lg:mt-14 bg-white/50 rounded-lg shadow-md"
+      className="max-w-2xl mx-auto p-8 mt-24 lg:mt-14 bg-white/50 rounded-lg shadow-md"
     >
       <h2 className="text-lg md:text-2xl font-semibold mb-2">
         Hi, Alt-West Neighbour!

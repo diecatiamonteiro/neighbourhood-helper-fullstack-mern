@@ -77,6 +77,7 @@ export default function About() {
       <div className="text-center">
         <Link 
           to="/" 
+          onClick={() => window.scrollTo(0, 0)}
           className="inline-block bg-brick hover:bg-brickHover text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300"
         >
           Return to Homepage

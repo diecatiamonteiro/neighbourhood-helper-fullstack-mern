@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { DataContext } from "../contexts/Context";
 import { createRequest } from "../api/requestsApi";
@@ -6,13 +6,20 @@ import { getCurrentDateTime } from "../utils/getCurrentDateTime";
 
 export default function AskForHelp() {
   const navigate = useNavigate();
-  const { requestsDispatch } = useContext(DataContext);
+  const { requestsDispatch, usersState } = useContext(DataContext);
   const [formData, setFormData] = useState({
     description: "",
     category: "",
     when: "",
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const { isAuthenticated, user } = usersState;
+
+  useEffect(() => {
+    if (!isAuthenticated && !user) {
+      navigate('/login', { state: { returnTo: '/askforhelp' } });
+    }
+  }, [isAuthenticated, user]);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,6 +30,10 @@ export default function AskForHelp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated || !user) {
+      navigate("/login");
+      return;
+    }
     await createRequest(requestsDispatch, formData);
     // Clear form data
     setFormData({
